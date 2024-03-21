@@ -12,7 +12,7 @@ main loop:
 	1. when we recieve stuff, validate it to check if it is an IRC protocol command
 		- if not valid, we either ignore or send something back idk bro
 	2. if valid IRC command, we check if we can "excecute" the command
-		- e.g. if we receive channel command, make sure the user is connected to our 
+		- e.g. if we receive channel command, make sure the user is connected to our
 			server and joined to the specific channel
 		- other stuff like that depending on the command we receive
 		- if we can not execute the command, send response to the client????
@@ -20,6 +20,7 @@ main loop:
 		- e.g. set nick for the user
 		- change topic etc. for the channel
 		- then send response to the client probably????
+	- do IRC protocol connection registration somewhere after clients connect
 2. ping users to make sure they are still connected
    - if we get no response disconnect the user
 
@@ -37,8 +38,8 @@ classes we need:
 	- mode
 
 - users (or clients)
-	- client id
-	- IP address if needed??
+	- client id???
+	- socket
 	- nick
 	- username
 	- list of joined channels (list of channel objects)
@@ -62,6 +63,8 @@ classes we need:
 		- client sends message to channel
 
 - we need to be able to send valid IRC responses to the client
+	- parser for the incoming messages
+	- assembler for the messages we send
 	- things we need to send to client
 		- ping the client to make sure they are still connected
 			- if the disconnect, update channels
