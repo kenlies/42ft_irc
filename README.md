@@ -28,6 +28,7 @@ classes we need:
 - server
 	- list of connected clients (list of user objects)
 	- list of channels (list of channel objects)
+	- list of server operators (list of user objects)
 
 - channels
 	- name of the channel
@@ -38,7 +39,6 @@ classes we need:
 	- mode
 
 - users (or clients)
-	- client id???
 	- socket
 	- nick
 	- username
@@ -46,25 +46,24 @@ classes we need:
 	- maybe list of channels where operator idk bro
 
 - commands (what we can receive from clients)
-	- server commands
-		- connect
-		- disconnect
-		- join channel
-		- leave channel
-		- set nicname
-		- set username
-		- authentication as in subject????
-		- private message to user
-	- channel commands
-		- kick
-		- invite
-		- topic
-		- mode
-		- client sends message to channel
+	- each command should have a send method
+		- needs target as parameter (user or channel)
+		- takes the IRC protocol message parameters
+	- each command should have a receive method
+		- should accept IRC message parameters if there is any
+		- execute whatever the message expects to be executed
+	- each command should have an attribute to check if it needs operator permissions to be executed
+
 
 - we need to be able to send valid IRC responses to the client
 	- parser for the incoming messages
-	- assembler for the messages we send
+		- if we get the tag and the source, we just ignore them and get the command until the \r\n
+	- assembler for the messages we send (this will most likely be called by the send method in command objects)
+		- will join the command and the parameters
+
+
+
+- MIGHT COME BACK HERE AGAIN:
 	- things we need to send to client
 		- ping the client to make sure they are still connected
 			- if the disconnect, update channels
