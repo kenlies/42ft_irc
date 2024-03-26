@@ -12,4 +12,4 @@ $(NAME):
 fclean:
 	rm -rf $(NAME)
 
-.PHONY all fclean
+.PHONY: all fclean
