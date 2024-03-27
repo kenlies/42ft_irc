@@ -1,3 +1,4 @@
+#include "colors.h"
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <iostream>
@@ -5,6 +6,7 @@
 #include <unistd.h>
 #include <poll.h>
 #include <vector>
+#include <string>
 
 int main() {
     int port = 1337;
@@ -49,8 +51,13 @@ int main() {
 						close(pfds[i].fd);
 						pfds.erase(pfds.begin() + i);
 					}
-					else
-						std::cout << "Message from client: " << buffer<< std::endl;
+					else {
+						std::cout << "Message from client: " << buffer << std::endl;
+
+						std::string response = "Received this: ";
+						response += buffer;
+						send(pfds[i].fd, response.c_str(), response.length(), 0);
+					}
 				}
         	}
     	}
