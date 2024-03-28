@@ -1,15 +1,34 @@
-NAME = irc_server
-CC = c++
-CFLAGS = -Wall -Wextra -Werror
+NAME    = ircserv
+CC      = c++
+CFLAGS  = -Wall -Wextra -Werror
+SRC_D   = srcs/
+INC_D   = includes/
+OBJ_D   = obj/
 
-SRCS = main.cpp
+SRC     = main.cpp Server.cpp
+SRCS    = $(addprefix $(SRC_D), $(SRC))
+
+OBJ_D   = obj/
+OBJ     = $(SRC:.cpp=.o)
+OBJS    = $(addprefix $(OBJ_D), $(OBJ))
+
+INC     = -I$(INC_D)
 
 all: $(NAME)
 
-$(NAME):
-	$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
+$(OBJ_D)%.o: $(SRC_D)%.cpp
+	mkdir -p $(OBJ_D)
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
-fclean:
-	rm -rf $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-.PHONY: all fclean
+clean:
+	rm -rf $(OBJ_D)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
