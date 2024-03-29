@@ -55,18 +55,26 @@ void	Server::run(void) {
 			if (pfds[i].revents & POLLIN) {
 				if (pfds[i].fd == serverSocket) {
 					int clientSocket = accept(serverSocket, nullptr, nullptr);
+					if (clientSocket == -1) {
+						std::cerr << "Error accepting client connection" << std::endl;
+						continue;
+					}
 					pollfd clientPollfd;
 					clientPollfd.fd = clientSocket;
 					clientPollfd.events = POLLIN;
 					pfds.push_back(clientPollfd);
+					// Send welcome message
+					std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
+					send(clientSocket, message.c_str(), message.length(), 0);
 				}
 				else {
 					char buffer[512] = { 0 };
-					int nbytes = recv(pfds[i].fd, buffer, sizeof(buffer), 0);
+					int nbytes = recv(pfds[i].fd, buffer, sizeof(buffer) - 1, 0);
 					if (nbytes <= 0)
 					{
 						close(pfds[i].fd);
 						pfds.erase(pfds.begin() + i);
+						--i;
 					}
 					else {
 						std::cout << "Message from client: " << buffer << std::endl;
