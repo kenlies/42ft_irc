@@ -35,12 +35,17 @@ class Server {
 		// Attributes
 		unsigned int			port;
 		std::string				password;
+		int						serverSocket;
+		std::vector<pollfd> 	pfds;
 		std::vector<Channel *>	channels;
 		std::vector<Client *>	clients;
 
 		// Methods
 		void	validate_port(char *port);
 		void	validate_password(char *password);
+		void	createListenSocket(void);
+		void	handleNewConnection();
+		void	handleClientData(size_t pollFdIndex);
 
 };
 

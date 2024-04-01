@@ -3,6 +3,7 @@
 Server::Server(char *port, char *password) {
 	validate_port(port);
 	validate_password(password);
+	createListenSocket();
 }
 
 Server::~Server(void) {
@@ -27,67 +28,98 @@ void	Server::validate_password(char *password) {
 	this->password = password;
 }
 
-void	Server::run(void) {
+void	Server::createListenSocket(void) {
 	// Creating socket
-	int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (this->serverSocket == -1)
+		throw std::runtime_error("Error: Couldn't create server socket!");
+
+	// Set socket options for reusing addresses and ports
+	int yes = 1;
+	if (setsockopt(this->serverSocket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof yes) == -1)
+		throw std::runtime_error("Error: Couldn't set socket options!");
 
 	// Specifying the address
-	sockaddr_in serverAddress;
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_port = htons(this->port);
-	serverAddress.sin_addr.s_addr = INADDR_ANY;
+	struct sockaddr_in address;
+	address.sin_family = AF_INET;
+	address.sin_addr.s_addr = INADDR_ANY;
+	address.sin_port = htons(this->port);
 
 	// Binding socket
-	bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+	if (bind(this->serverSocket, (struct sockaddr *)&address, sizeof(address)) < 0)
+		throw std::runtime_error("Error binding server socket");
 
 	// Listening to the assigned socket
-	listen(serverSocket, 5);
+	if (listen(this->serverSocket, 5) < 0)
+		throw std::runtime_error("Error listening on server socket");
 
-	std::vector<pollfd> pfds;
+	// Add server socket to the list of file descriptors to be polled
 	pollfd serverPollfd;
-	serverPollfd.fd = serverSocket;
+	serverPollfd.fd = this->serverSocket;
 	serverPollfd.events = POLLIN;
 	pfds.push_back(serverPollfd);
+}
 
-	while (true) {
-		poll(pfds.data(), pfds.size(), -1);
+void Server::run() {
+    while (true) {
+        // Poll for events on all file descriptors
+		if (poll(pfds.data(), pfds.size(), -1) == -1)
+    		throw std::runtime_error("Error: Poll failed!");
+
+        // Iterate over all file descriptors, and handle events
+        // for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end();) {
 		for (size_t i = 0; i < pfds.size(); ++i) {
-			if (pfds[i].revents & POLLIN) {
-				if (pfds[i].fd == serverSocket) {
-					int clientSocket = accept(serverSocket, nullptr, nullptr);
-					if (clientSocket == -1) {
-						std::cerr << "Error accepting client connection" << std::endl;
-						continue;
-					}
-					pollfd clientPollfd;
-					clientPollfd.fd = clientSocket;
-					clientPollfd.events = POLLIN;
-					pfds.push_back(clientPollfd);
-					// Send welcome message
-					std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
-					send(clientSocket, message.c_str(), message.length(), 0);
-				}
+            if (pfds[i].revents & POLLIN) {
+                if (pfds[i].fd == serverSocket) {
+                    handleNewConnection();
+                }
 				else {
-					char buffer[512] = { 0 };
-					int nbytes = recv(pfds[i].fd, buffer, sizeof(buffer) - 1, 0);
-					if (nbytes <= 0)
-					{
-						close(pfds[i].fd);
-						pfds.erase(pfds.begin() + i);
-						--i;
-					}
-					else {
-						std::cout << "Message from client: " << buffer << std::endl;
-
-						std::string command = buffer;
-
-						std::string response = "Received this: ";
-						response += buffer;
-						send(pfds[i].fd, response.c_str(), response.length(), 0);
-					}
+					handleClientData(i);
 				}
-			}
-		}
-	}
-	close(serverSocket);
+            }
+        }
+    }
+	// Close the server socket when done
+    close(serverSocket);
+}
+
+void Server::handleNewConnection() {
+	// Accept the new client connection
+    int clientSocket = accept(this->serverSocket, nullptr, nullptr);
+    if (clientSocket == -1)
+        throw std::runtime_error("Error accepting client connection");
+
+    // Add the client socket to the list of polled file descriptors
+	pollfd clientPollfd;
+	clientPollfd.fd = clientSocket;
+	clientPollfd.events = POLLIN;
+    pfds.push_back(clientPollfd);
+
+	// Print the new client connection
+	std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
+
+    // Send welcome message to the client
+    std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
+    send(clientSocket, message.c_str(), message.length(), 0);
+}
+
+void Server::handleClientData(size_t pollFdIndex) {
+	// Receive data from the client
+    char buffer[512] = { 0 };
+    int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
+    if (nbytes <= 0) {
+		// Print the client disconnection
+		std::cout << RED << "Client disconnected: " << pfds[pollFdIndex].fd << RESET << std::endl;
+		close(pfds[pollFdIndex].fd);
+		pfds.erase(pfds.begin() + pollFdIndex);
+		return ;
+    }
+
+    // Print received message
+    std::cout << BLUE << "Message from client: " RESET << buffer << std::endl;
+
+    // Echo the received message back to the client
+    std::string response = BLUE "Received this: " RESET;
+    response += buffer;
+    send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
