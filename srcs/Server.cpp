@@ -85,7 +85,9 @@ void Server::run() {
 
 void Server::handleNewConnection() {
 	// Accept the new client connection
-    int clientSocket = accept(this->serverSocket, nullptr, nullptr);
+	struct sockaddr_storage clientAddress;
+	socklen_t clientAddressSize = sizeof(clientAddress);
+    int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
     if (clientSocket == -1)
         throw std::runtime_error("Error accepting client connection");
 
@@ -95,12 +97,16 @@ void Server::handleNewConnection() {
 	clientPollfd.events = POLLIN;
     pfds.push_back(clientPollfd);
 
-	// Print the new client connection
-	std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
+	clients.push_back(new Client(clientSocket));
 
-    // Send welcome message to the client
-    std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
-    send(clientSocket, message.c_str(), message.length(), 0);
+	//GONNA DELETE THE BELOW CODE
+
+	// // Print the new client connection
+	// std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
+
+    // // Send welcome message to the client
+    // std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
+    // send(clientSocket, message.c_str(), message.length(), 0);
 }
 
 void Server::handleClientData(size_t pollFdIndex) {

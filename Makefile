@@ -5,7 +5,7 @@ SRC_D   = srcs/
 INC_D   = includes/
 OBJ_D   = obj/
 
-SRC     = main.cpp Server.cpp
+SRC     = main.cpp Server.cpp Client.cpp
 SRCS    = $(addprefix $(SRC_D), $(SRC))
 
 OBJ_D   = obj/

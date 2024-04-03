@@ -27,8 +27,8 @@ class Channel {
 		int						id; // not sure if we are gonna keep this!
 		std::string				topic;
 		std::string				mode;
-		std::vector<Client *>	clients;
-		std::vector<Client *>	operators;
+		// std::vector<Client *>	clients;
+		// std::vector<Client *>	operators;
 
 		// Methods
 

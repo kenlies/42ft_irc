@@ -11,7 +11,7 @@ class Client {
 	public:
 
 		// Constructors and destructors
-		Client(void);
+		Client(int socket_fd);
 		~Client(void);
 
 		// Methods
@@ -19,11 +19,12 @@ class Client {
 	private:
 
 		// Canonical form
+		Client(void);
 		Client(Client const &copy);
 		Client &operator=(Client const &copy);
 
 		// Attributes
-		int 					socket; // not sure if it should be an int!
+		int 					socket_fd;
 		std::string				nickname;
 		std::string				username;
 		// std::vector<Channel *>	joinedChannels;
