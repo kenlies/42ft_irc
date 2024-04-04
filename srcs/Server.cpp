@@ -101,15 +101,18 @@ void Server::handleNewConnection() {
 
 	//GONNA DELETE THE BELOW CODE
 
-	// // Print the new client connection
-	// std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
+	// Print the new client connection
+	std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
 
-    // // Send welcome message to the client
-    // std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
-    // send(clientSocket, message.c_str(), message.length(), 0);
+    // Send welcome message to the client
+    std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
+    send(clientSocket, message.c_str(), message.length(), 0);
 }
 
 void Server::handleClientData(size_t pollFdIndex) {
+	//client is the client that sent the message
+	Client *client = getClient(pfds[pollFdIndex].fd);
+
 	// Receive data from the client
     char buffer[512] = { 0 };
     int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
@@ -124,8 +127,22 @@ void Server::handleClientData(size_t pollFdIndex) {
     // Print received message
     std::cout << BLUE << "Message from client: " RESET << buffer << std::endl;
 
+	std::string message = buffer;
+	Command command(message, client);
+
+	// std::string response = executeCommand(message, pollFdIndex);
     // Echo the received message back to the client
     std::string response = BLUE "Received this: " RESET;
     response += buffer;
     send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
+
+
+Client *Server::getClient(int socket_fd) {
+	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); ++it) {
+		if ((*it)->getSocketFd() == socket_fd)
+			return (*it);
+	}
+	return (NULL);
+}
+

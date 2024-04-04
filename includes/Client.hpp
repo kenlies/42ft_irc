@@ -15,6 +15,7 @@ class Client {
 		~Client(void);
 
 		// Methods
+		int		getSocketFd(void) const;
 
 	private:
 

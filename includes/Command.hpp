@@ -4,6 +4,7 @@
 #include "colors.h"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include "Server.hpp"
 #include <iostream>
 #include <string>
 
@@ -12,7 +13,8 @@ class Command {
 	public:
 
 		// Constructors and destructors
-		Command(std::string command, Client *client, Channel *channel);
+		Command(void);
+		Command(std::string message, Client *client);
 		virtual ~Command(void);
 
 		// Methods
@@ -31,6 +33,7 @@ class Command {
 		Channel		*channel;
 
 		// Methods
+		std::vector<std::string> parseMessage(std::string message);
 
 };
 

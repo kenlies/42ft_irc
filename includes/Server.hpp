@@ -4,9 +4,11 @@
 #include "colors.h"
 #include "Channel.hpp"
 #include "Client.hpp"
+#include "Command.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -46,6 +48,7 @@ class Server {
 		void	createListenSocket(void);
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
+		Client	*getClient(int socket_fd);
 
 };
 
