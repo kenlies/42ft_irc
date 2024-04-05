@@ -4,6 +4,7 @@ Server::Server(char *port, char *password) {
 	validate_port(port);
 	validate_password(password);
 	createListenSocket();
+	commandsAvailable();
 }
 
 Server::~Server(void) {
@@ -67,7 +68,6 @@ void Server::run() {
     		throw std::runtime_error("Error: Poll failed!");
 
         // Iterate over all file descriptors, and handle events
-        // for (std::vector<pollfd>::iterator it = pfds.begin(); it != pfds.end();) {
 		for (size_t i = 0; i < pfds.size(); ++i) {
             if (pfds[i].revents & POLLIN) {
                 if (pfds[i].fd == serverSocket) {
@@ -111,8 +111,8 @@ void Server::handleNewConnection() {
 
 void Server::handleClientData(size_t pollFdIndex) {
 	//client is the client that sent the message
-	Client *client = getClient(pfds[pollFdIndex].fd);
-
+// 	Client *client = getClient(pfds[pollFdIndex].fd);
+//  (void)client;
 	// Receive data from the client
     char buffer[512] = { 0 };
     int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
@@ -128,10 +128,11 @@ void Server::handleClientData(size_t pollFdIndex) {
     std::cout << BLUE << "Message from client: " RESET << buffer << std::endl;
 
 	std::string message = buffer;
-	Command command(message, client);
+	parseMessage(message);
+	// ACommand command(message, client);
+	executeCommand();
 
-	// std::string response = executeCommand(message, pollFdIndex);
-    // Echo the received message back to the client
+
     std::string response = BLUE "Received this: " RESET;
     response += buffer;
     send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
@@ -146,3 +147,28 @@ Client *Server::getClient(int socket_fd) {
 	return (NULL);
 }
 
+void Server::commandsAvailable(void) {
+	commandList.push_back("CAP");	// Capability list
+}
+
+void Server::executeCommand() {
+	if (splittedMessage.empty())
+		return ;
+	std::string commandName = splittedMessage[0];
+	if (std::find(commandList.begin(), commandList.end(), commandName) != commandList.end()) {
+		std::cout << "Command " << commandName << " is available!" << std::endl;
+	}
+	else {
+		std::cout << "Command " << commandName << " is not available!" << std::endl;
+	}
+	splittedMessage.clear();
+}
+
+void Server::parseMessage(std::string message) {
+//split them based on the spaces
+	std::stringstream ss(message);
+	std::string word;
+	while (ss >> word) {
+		splittedMessage.push_back(word);
+	}
+}

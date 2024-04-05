@@ -4,7 +4,7 @@
 #include "colors.h"
 #include "Channel.hpp"
 #include "Client.hpp"
-#include "Command.hpp"
+#include "ACommand.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <string>
@@ -41,14 +41,20 @@ class Server {
 		std::vector<pollfd> 	pfds;
 		std::vector<Channel *>	channels;
 		std::vector<Client *>	clients;
+		std::vector<std::string>commandList;
+		std::vector<std::string> splittedMessage;
+
 
 		// Methods
 		void	validate_port(char *port);
 		void	validate_password(char *password);
+		void	commandsAvailable(void);
 		void	createListenSocket(void);
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
 		Client	*getClient(int socket_fd);
+		void	parseMessage(std::string message);
+		void	executeCommand();
 
 };
 
