@@ -2,6 +2,7 @@
 # define SERVER_HPP
 
 #include "colors.h"
+#include "CAP.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "ACommand.hpp"
@@ -15,11 +16,13 @@
 #include <netinet/in.h>
 #include <poll.h>
 #include <fcntl.h>
+#include <map>
+#include <memory>
 
 class Server {
 
+		// typedef void(*cmd)();
 	public:
-
 		// Constructors and destructors
 		Server(char *port, char *password);
 		~Server(void);
@@ -41,8 +44,10 @@ class Server {
 		std::vector<pollfd> 	pfds;
 		std::vector<Channel *>	channels;
 		std::vector<Client *>	clients;
-		std::vector<std::string>commandList;
-		std::vector<std::string> splittedMessage;
+
+
+		std::map<std::string, std::unique_ptr<void>> commandList;
+		// ACommand				*command;
 
 
 		// Methods
@@ -52,9 +57,9 @@ class Server {
 		void	createListenSocket(void);
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
+
 		Client	*getClient(int socket_fd);
-		void	parseMessage(std::string message);
-		void	executeCommand();
+		// void	executeCommand();
 
 };
 

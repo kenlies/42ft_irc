@@ -1,37 +1,25 @@
 #include "ACommand.hpp"
 
-ACommand::ACommand(std::string message, Client *client) {
-	this->client = client;
-	std::vector<std::string> splittedMessage = parseMessage(message);
-	if (splittedMessage.size() == 0)
-		return ;
-	this->command = splittedMessage[0];
-	for (size_t i = 1; i < splittedMessage.size(); i++) {
-		this->parameters.push_back(splittedMessage[i]);
-	}
-
-
-	//display the command and the parameters//DELETE THIS
-	std::cout << "Command: " << this->command << std::endl;
-	std::cout << "Parameters: ";
-	for (size_t i = 0; i < this->parameters.size(); i++) {
-		std::cout << this->parameters[i] << " ";
-	}
-	std::cout << std::endl;
+ACommand::ACommand(void) {
 }
 
 ACommand::~ACommand(void) {
 }
 
-std::vector<std::string> ACommand::parseMessage(std::string message) {
-//split them based on the spaces
+void ACommand::parseMessage(std::string message) {
+	//save the message
+	this->message = message;
+	//split them based on the spaces
 	std::stringstream ss(message);
-	std::vector<std::string> splittedMessage;
 	std::string word;
 	while (ss >> word) {
-		splittedMessage.push_back(word);
+		this->parameters.push_back(word);
 	}
-	return splittedMessage;
+	//split the command from the parameters
+	if (this->parameters.size() > 0) {
+		this->command = this->parameters[0];
+		this->parameters.erase(this->parameters.begin());
+	}
 }
 
 std::string ACommand::getCommand(void) const {

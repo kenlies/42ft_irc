@@ -5,9 +5,15 @@ Server::Server(char *port, char *password) {
 	validate_password(password);
 	createListenSocket();
 	commandsAvailable();
+	//display the commandsList
+    for (auto it = commandList.begin(); it != commandList.end(); ++it) {
+        std::cout << RED << it->first << RESET << std::endl;
+    }
+	// this->command = new ACommand();
 }
 
 Server::~Server(void) {
+	// delete this->command;
 }
 
 void	Server::validate_port(char *port) {
@@ -59,6 +65,11 @@ void	Server::createListenSocket(void) {
 	serverPollfd.fd = this->serverSocket;
 	serverPollfd.events = POLLIN;
 	pfds.push_back(serverPollfd);
+}
+
+void Server::commandsAvailable(void) {
+		commandList["CAP"] = std::make_unique<CAP>();
+        // commandList["NICK"] = std::make_unique<NICK>();
 }
 
 void Server::run() {
@@ -128,9 +139,8 @@ void Server::handleClientData(size_t pollFdIndex) {
     std::cout << BLUE << "Message from client: " RESET << buffer << std::endl;
 
 	std::string message = buffer;
-	parseMessage(message);
-	// ACommand command(message, client);
-	executeCommand();
+	// command->parseMessage(message);
+	// executeCommand();
 
 
     std::string response = BLUE "Received this: " RESET;
@@ -147,28 +157,28 @@ Client *Server::getClient(int socket_fd) {
 	return (NULL);
 }
 
-void Server::commandsAvailable(void) {
-	commandList.push_back("CAP");	// Capability list
-}
+// void Server::executeCommand() {
+// 	std::string commandName = command->getCommand();
+// 	//find the command in the commandList based on the first part of the map!
+// 	std::map<std::string, ACommand*>::iterator it = commandList.find(commandName);
+// 	if (it != commandList.end()) {
+// 		std::cout << "Command " << commandName << " is available!" << std::endl;
+// 		it->second->execute();
+// 	}
+// 	else {
+// 		std::cout << "Command " << commandName << " is not available!" << std::endl;
+// 	}
 
-void Server::executeCommand() {
-	if (splittedMessage.empty())
-		return ;
-	std::string commandName = splittedMessage[0];
-	if (std::find(commandList.begin(), commandList.end(), commandName) != commandList.end()) {
-		std::cout << "Command " << commandName << " is available!" << std::endl;
-	}
-	else {
-		std::cout << "Command " << commandName << " is not available!" << std::endl;
-	}
-	splittedMessage.clear();
-}
 
-void Server::parseMessage(std::string message) {
-//split them based on the spaces
-	std::stringstream ss(message);
-	std::string word;
-	while (ss >> word) {
-		splittedMessage.push_back(word);
-	}
-}
+// 	// if (splittedMessage.empty())
+// 	// 	return ;
+// 	// std::string commandName = splittedMessage[0];
+// 	// if (std::find(commandList.begin(), commandList.end(), commandName) != commandList.end()) {
+// 	// 	std::cout << "Command " << commandName << " is available!" << std::endl;
+// 	// }
+// 	// else {
+// 	// 	std::cout << "Command " << commandName << " is not available!" << std::endl;
+// 	// }
+// 	// splittedMessage.clear();
+// }
+

@@ -1,11 +1,11 @@
 NAME    = ircserv
 CC      = c++
-CFLAGS  = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS  = -Wall -Wextra -Werror -std=c++2a -fsanitize=address -g3
 SRC_D   = srcs/
 INC_D   = includes/
 OBJ_D   = obj/
 
-SRC     = main.cpp Server.cpp Client.cpp Channel.cpp
+SRC     = main.cpp Server.cpp Client.cpp Channel.cpp ACommand.cpp CAP.cpp
 SRCS    = $(addprefix $(SRC_D), $(SRC))
 
 OBJ_D   = obj/

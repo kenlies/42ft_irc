@@ -7,6 +7,7 @@
 // #include "Server.hpp"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 class Server;
 
@@ -16,9 +17,12 @@ class ACommand {
 
 		// Constructors and destructors
 		ACommand(void);
-		virtual ~ACommand(void);
+		~ACommand(void);
 
 		// Methods
+		std::string	getCommand(void) const;
+		void	parseMessage(std::string message);
+		// virtual void execute() = 0;
 
 	protected:
 
@@ -27,9 +31,11 @@ class ACommand {
 		ACommand &operator=(ACommand const &copy);
 
 		// Attributes
+		std::string message;
+		std::string command;
+		std::vector<std::string> parameters;
 
 		// Methods
-
 };
 
 # endif

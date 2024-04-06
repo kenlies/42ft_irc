@@ -1,6 +1,9 @@
 #ifndef CAP_HPP
 # define CAP_HPP
 
+#include "ACommand.hpp"
+#include <memory>
+
 class CAP {
 
 	public:
@@ -9,6 +12,7 @@ class CAP {
 		~CAP(void);
 
 		// Methods
+		void execute();
 
 	private:
 
