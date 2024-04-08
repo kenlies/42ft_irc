@@ -3,6 +3,7 @@
 
 #include "colors.h"
 #include "CAP.hpp"
+#include "NICK.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "ACommand.hpp"
@@ -21,7 +22,6 @@
 
 class Server {
 
-		// typedef void(*cmd)();
 	public:
 		// Constructors and destructors
 		Server(char *port, char *password);
@@ -42,13 +42,9 @@ class Server {
 		std::string				password;
 		int						serverSocket;
 		std::vector<pollfd> 	pfds;
-		std::vector<Channel *>	channels;
 		std::vector<Client *>	clients;
-
-
-		std::map<std::string, std::unique_ptr<void>> commandList;
-		// ACommand				*command;
-
+		std::vector<Channel *>	channels;
+		std::map<std::string, std::unique_ptr<ACommand>> commandList;
 
 		// Methods
 		void	validate_port(char *port);
@@ -57,9 +53,8 @@ class Server {
 		void	createListenSocket(void);
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
+		void	executeCommand(std::string message);
 
-		Client	*getClient(int socket_fd);
-		// void	executeCommand();
 
 };
 

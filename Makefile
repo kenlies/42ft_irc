@@ -5,19 +5,20 @@ SRC_D   = srcs/
 INC_D   = includes/
 OBJ_D   = obj/
 
-SRC     = main.cpp Server.cpp Client.cpp Channel.cpp ACommand.cpp CAP.cpp
-SRCS    = $(addprefix $(SRC_D), $(SRC))
+SRC     = main.cpp Server.cpp Client.cpp Channel.cpp \
+		./commands/ACommand.cpp ./commands/CAP.cpp ./commands/NICK.cpp
 
 OBJ_D   = obj/
 OBJ     = $(SRC:.cpp=.o)
 OBJS    = $(addprefix $(OBJ_D), $(OBJ))
 
-INC     = -I$(INC_D)
+INC     = -I$(INC_D) -I$(INC_D)commands/
 
 all: $(NAME)
 
 $(OBJ_D)%.o: $(SRC_D)%.cpp
 	mkdir -p $(OBJ_D)
+	mkdir -p $(OBJ_D)commands
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 $(NAME): $(OBJS)

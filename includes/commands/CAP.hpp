@@ -4,7 +4,7 @@
 #include "ACommand.hpp"
 #include <memory>
 
-class CAP {
+class CAP : public ACommand {
 
 	public:
 		// Constructors and destructors
@@ -12,7 +12,7 @@ class CAP {
 		~CAP(void);
 
 		// Methods
-		void execute();
+		void execute(std::string message);
 
 	private:
 

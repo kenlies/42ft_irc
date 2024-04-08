@@ -5,15 +5,9 @@ Server::Server(char *port, char *password) {
 	validate_password(password);
 	createListenSocket();
 	commandsAvailable();
-	//display the commandsList
-    for (auto it = commandList.begin(); it != commandList.end(); ++it) {
-        std::cout << RED << it->first << RESET << std::endl;
-    }
-	// this->command = new ACommand();
 }
 
 Server::~Server(void) {
-	// delete this->command;
 }
 
 void	Server::validate_port(char *port) {
@@ -67,12 +61,12 @@ void	Server::createListenSocket(void) {
 	pfds.push_back(serverPollfd);
 }
 
-void Server::commandsAvailable(void) {
+void	Server::commandsAvailable(void) {
 		commandList["CAP"] = std::make_unique<CAP>();
-        // commandList["NICK"] = std::make_unique<NICK>();
+        commandList["NICK"] = std::make_unique<NICK>();
 }
 
-void Server::run() {
+void	Server::run() {
     while (true) {
         // Poll for events on all file descriptors
 		if (poll(pfds.data(), pfds.size(), -1) == -1)
@@ -121,9 +115,6 @@ void Server::handleNewConnection() {
 }
 
 void Server::handleClientData(size_t pollFdIndex) {
-	//client is the client that sent the message
-// 	Client *client = getClient(pfds[pollFdIndex].fd);
-//  (void)client;
 	// Receive data from the client
     char buffer[512] = { 0 };
     int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
@@ -132,53 +123,40 @@ void Server::handleClientData(size_t pollFdIndex) {
 		std::cout << RED << "Client disconnected: " << pfds[pollFdIndex].fd << RESET << std::endl;
 		close(pfds[pollFdIndex].fd);
 		pfds.erase(pfds.begin() + pollFdIndex);
+		// remove the client from the list!!!!!
 		return ;
     }
 
     // Print received message
     std::cout << BLUE << "Message from client: " RESET << buffer << std::endl;
 
-	std::string message = buffer;
-	// command->parseMessage(message);
-	// executeCommand();
+	executeCommand(buffer);
 
-
+	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
     std::string response = BLUE "Received this: " RESET;
     response += buffer;
     send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
 
+void Server::executeCommand(std::string message) {
+	//check the ending /r/n! check what to do???!!!
+	//if after /r/n there is no null terminator! check what to do??!!!
+	//if it is empty just ignore, no error!
+	//we accept spaces in the beginning!
+	//ONLY SPACE CHARACTER!
 
-Client *Server::getClient(int socket_fd) {
-	for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); ++it) {
-		if ((*it)->getSocketFd() == socket_fd)
-			return (*it);
+	//check if the message has other whitespace characters beside space!
+
+	//JOIN HELLO, when we send the message to the executor we skip the command part!
+
+	std::string commandName;
+	std::istringstream iss(message);
+	iss >> commandName;
+	if (commandList.find(commandName) != commandList.end()) {
+		commandList[commandName]->execute(message); //the other thing to send here is the client object that we recieved the message from!
 	}
-	return (NULL);
+	else {
+		std::cout << "Command " << commandName << " is not available!" << std::endl;
+	}
 }
-
-// void Server::executeCommand() {
-// 	std::string commandName = command->getCommand();
-// 	//find the command in the commandList based on the first part of the map!
-// 	std::map<std::string, ACommand*>::iterator it = commandList.find(commandName);
-// 	if (it != commandList.end()) {
-// 		std::cout << "Command " << commandName << " is available!" << std::endl;
-// 		it->second->execute();
-// 	}
-// 	else {
-// 		std::cout << "Command " << commandName << " is not available!" << std::endl;
-// 	}
-
-
-// 	// if (splittedMessage.empty())
-// 	// 	return ;
-// 	// std::string commandName = splittedMessage[0];
-// 	// if (std::find(commandList.begin(), commandList.end(), commandName) != commandList.end()) {
-// 	// 	std::cout << "Command " << commandName << " is available!" << std::endl;
-// 	// }
-// 	// else {
-// 	// 	std::cout << "Command " << commandName << " is not available!" << std::endl;
-// 	// }
-// 	// splittedMessage.clear();
-// }
 

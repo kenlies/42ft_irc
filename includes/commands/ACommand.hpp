@@ -17,12 +17,11 @@ class ACommand {
 
 		// Constructors and destructors
 		ACommand(void);
-		~ACommand(void);
+		virtual ~ACommand(void);
 
 		// Methods
-		std::string	getCommand(void) const;
-		void	parseMessage(std::string message);
-		// virtual void execute() = 0;
+		virtual void	execute(std::string message) = 0;
+		void			parseMessage(std::string message);
 
 	protected:
 
@@ -31,8 +30,6 @@ class ACommand {
 		ACommand &operator=(ACommand const &copy);
 
 		// Attributes
-		std::string message;
-		std::string command;
 		std::vector<std::string> parameters;
 
 		// Methods

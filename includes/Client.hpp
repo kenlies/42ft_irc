@@ -28,6 +28,7 @@ class Client {
 		int 					socket_fd;
 		std::string				nickname;
 		std::string				username;
+		bool					registered;
 		// std::vector<Channel *>	joinedChannels;
 
 
