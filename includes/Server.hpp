@@ -18,7 +18,9 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <map>
+#include <regex>
 #include <memory>
+#include <iomanip>
 
 class Server {
 
@@ -47,13 +49,14 @@ class Server {
 		std::map<std::string, std::unique_ptr<ACommand>> commandList;
 
 		// Methods
-		void	validate_port(char *port);
-		void	validate_password(char *password);
+		void	validatePort(char *port);
+		void	validatePassword(char *password);
 		void	commandsAvailable(void);
 		void	createListenSocket(void);
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
 		void	executeCommand(std::string message);
+		std::pair<std::string, std::string> validateCommand(std::string message);
 
 
 };

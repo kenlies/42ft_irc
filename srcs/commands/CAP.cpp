@@ -7,5 +7,5 @@ CAP::~CAP(void) {
 }
 
 void CAP::execute(std::string message) {
-	std::cout << "CAP command executed: " << message << std::endl;
+	std::cout << "CAP command: Message: " << message << std::endl;
 }

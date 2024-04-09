@@ -1,8 +1,8 @@
 #include "Server.hpp"
 
 Server::Server(char *port, char *password) {
-	validate_port(port);
-	validate_password(password);
+	validatePort(port);
+	validatePassword(password);
 	createListenSocket();
 	commandsAvailable();
 }
@@ -10,7 +10,7 @@ Server::Server(char *port, char *password) {
 Server::~Server(void) {
 }
 
-void	Server::validate_port(char *port) {
+void	Server::validatePort(char *port) {
 	for (size_t i = 0; i < strlen(port); ++i) {
 		if (!isdigit(port[i]))
 			throw std::runtime_error("Error: Port must be a number!");
@@ -21,7 +21,7 @@ void	Server::validate_port(char *port) {
 	this->port = p;
 }
 
-void	Server::validate_password(char *password) {
+void	Server::validatePassword(char *password) {
 	if (password[0]	== '\0')
 		throw std::runtime_error("Error: Password cannot be empty!");
 	if (std::string(password).find(' ') != std::string::npos)
@@ -126,10 +126,11 @@ void Server::handleClientData(size_t pollFdIndex) {
 		// remove the client from the list!!!!!
 		return ;
     }
+	if (buffer[0] == '\0' || buffer[0] == '\n' || buffer[0] == '\r')
+		return ;
 
     // Print received message
-    std::cout << BLUE << "Message from client: " RESET << buffer << std::endl;
-
+    std::cout << BLUE << "Message from client: " << buffer << RESET << std::endl;
 	executeCommand(buffer);
 
 	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
@@ -139,24 +140,41 @@ void Server::handleClientData(size_t pollFdIndex) {
 }
 
 void Server::executeCommand(std::string message) {
-	//check the ending /r/n! check what to do???!!!
-	//if after /r/n there is no null terminator! check what to do??!!!
-	//if it is empty just ignore, no error!
-	//we accept spaces in the beginning!
-	//ONLY SPACE CHARACTER!
-
-	//check if the message has other whitespace characters beside space!
-
-	//JOIN HELLO, when we send the message to the executor we skip the command part!
-
-	std::string commandName;
-	std::istringstream iss(message);
-	iss >> commandName;
-	if (commandList.find(commandName) != commandList.end()) {
-		commandList[commandName]->execute(message); //the other thing to send here is the client object that we recieved the message from!
+	if (message.empty() || message[0] == '\n' || message[0] == '\r')
+		return ;
+	std::pair<std::string, std::string> command = validateCommand(message);
+	if (!command.first.empty() && commandList.find(command.first) != commandList.end()) {
+		commandList[command.first]->execute(command.second);
 	}
 	else {
-		std::cout << "Command " << commandName << " is not available!" << std::endl;
+		std::cout << "Command " << command.first << " is not available!" << std::endl;
 	}
 }
 
+std::pair<std::string, std::string> Server::validateCommand(std::string message) {
+	// for (size_t i = 0; i < message.size(); ++i)
+	// 	std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(message[i]) << " ";
+	// std::cout << std::endl;
+	if (message.find("\r\n\0") == std::string::npos) {
+		std::cout << "No CRLF found in the end of the string!" << std::endl;
+   		return std::make_pair("", "");
+	}
+    size_t pos = 0;
+    while ((pos = message.find("\r\n", pos)) != std::string::npos) {
+        message.replace(pos, 2, " ");
+        pos += 1;
+    }
+	for (char c : message) {
+		if (std::isspace(c) && c != ' ') {
+			std::cout << "Found other whitespace characters!" << std::endl;
+			return std::make_pair("", "");
+		}
+	}
+    std::stringstream ss(message);
+    std::string command, restOfMessage;
+    if (std::getline(ss, command, ' ')) {
+        std::getline(ss, restOfMessage);
+    }
+	// return std::make_pair(command, restOfMessage.substr(restOfMessage.find_first_not_of(' ')));
+	return std::make_pair(command, restOfMessage);
+}

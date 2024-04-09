@@ -11,7 +11,7 @@ class Client {
 	public:
 
 		// Constructors and destructors
-		Client(int socket_fd);
+		Client(int socketFd);
 		~Client(void);
 
 		// Methods
@@ -25,7 +25,8 @@ class Client {
 		Client &operator=(Client const &copy);
 
 		// Attributes
-		int 					socket_fd;
+		int 					socketFd;
+		char					msgBuffer[512];
 		std::string				nickname;
 		std::string				username;
 		bool					registered;

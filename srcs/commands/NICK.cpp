@@ -7,5 +7,5 @@ NICK::~NICK(void) {
 }
 
 void NICK::execute(std::string message) {
-	std::cout << "NICK command executed: " << message << std::endl;
+	std::cout << "NICK command: Message: " << message << std::endl;
 }
