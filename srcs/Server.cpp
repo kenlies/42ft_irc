@@ -115,6 +115,8 @@ void Server::handleNewConnection() {
 }
 
 void Server::handleClientData(size_t pollFdIndex) {
+	//get client from the list of clients based on the pollFdIndex
+	Client *client = getClientBySocketFd(pfds[pollFdIndex].fd);
 	// Receive data from the client
     char buffer[512] = { 0 };
     int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
@@ -123,16 +125,21 @@ void Server::handleClientData(size_t pollFdIndex) {
 		std::cout << RED << "Client disconnected: " << pfds[pollFdIndex].fd << RESET << std::endl;
 		close(pfds[pollFdIndex].fd);
 		pfds.erase(pfds.begin() + pollFdIndex);
-		// remove the client from the list!!!!!
+
+		//THIS WILL HAVE TO BE A SEPARATE FUNCTION, WHERE WE DELETE THE CLIENT FROM THE LIST OF CHANNELS HE HAS JOINED AND SO ON!
+		clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
 		return ;
     }
-	if (buffer[0] == '\0' || buffer[0] == '\n' || buffer[0] == '\r')
-		return ;
+	client->addBufferToMsgBuffer(buffer);
 
-    // Print received message
-    std::cout << BLUE << "Message from client: " << buffer << RESET << std::endl;
-	executeCommand(buffer);
-
+	while (client->validMessage()) {
+		executeCommand(client->getMsgBuffer());
+	}
+	//MIGHT HAVE TO DELETE THIS IN THE END, CHECK THIS AGAIN LATER
+	// if (buffer[0] == '\0' || buffer[0] == '\n' || buffer[0] == '\r')
+	// 	return ;
+    // // Print received message
+    // std::cout << BLUE << "Message from client: " << buffer << RESET << std::endl;
 	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
     std::string response = BLUE "Received this: " RESET;
     response += buffer;
@@ -177,4 +184,12 @@ std::pair<std::string, std::string> Server::validateCommand(std::string message)
     }
 	// return std::make_pair(command, restOfMessage.substr(restOfMessage.find_first_not_of(' ')));
 	return std::make_pair(command, restOfMessage);
+}
+
+Client *Server::getClientBySocketFd(int socketFd) {
+	for (size_t i = 0; i < clients.size(); ++i) {
+		if (clients[i]->getSocketFd() == socketFd)
+			return clients[i];
+	}
+	return nullptr;
 }

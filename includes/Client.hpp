@@ -15,7 +15,10 @@ class Client {
 		~Client(void);
 
 		// Methods
-		int		getSocketFd(void) const;
+		int		getSocketFd(void);
+		void 	addBufferToMsgBuffer(std::string buffer);
+		bool	validMessage(void);
+		std::string getMsgBuffer(void);
 
 	private:
 
@@ -26,7 +29,7 @@ class Client {
 
 		// Attributes
 		int 					socketFd;
-		char					msgBuffer[512];
+		std::string				msgBuffer;
 		std::string				nickname;
 		std::string				username;
 		bool					registered;

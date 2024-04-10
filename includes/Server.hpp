@@ -57,6 +57,7 @@ class Server {
 		void	handleClientData(size_t pollFdIndex);
 		void	executeCommand(std::string message);
 		std::pair<std::string, std::string> validateCommand(std::string message);
+		Client	*getClientBySocketFd(int socketFd);
 
 
 };
