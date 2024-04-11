@@ -133,17 +133,17 @@ void Server::handleClientData(size_t pollFdIndex) {
     }
 	client->addBufferToMsgBuffer(buffer);
 	while (client->msgCompleted()) {
-		parseMsg(client->getMsgFromBuffer());
+		parseMsg(client->getMsgFromBuffer(), client);
 	}
 
 	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
-    std::string response = BLUE "Received this: " RESET;
-    response += buffer;
-    send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
+    // std::string response = BLUE "Received this: " RESET;
+    // response += buffer;
+    // send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
 
 // Checks if the command is valid and checks if it can find in the commandList
-void Server::parseMsg(std::string message) {
+void Server::parseMsg(std::string message, Client *client) {
 	//just check if the message is empty, it has not command to execute!
 	if (message.empty())
 		return ;
@@ -170,7 +170,7 @@ void Server::parseMsg(std::string message) {
 
 	// execute command if found, or return error
 	if (commandList.find(command) != commandList.end()) {
-		commandList[command]->execute(restOfMessage);
+		commandList[command]->execute(restOfMessage, client);
 	}
 	else {
 		// FIXME: Handle invalid commands properly!

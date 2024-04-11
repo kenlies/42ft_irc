@@ -12,7 +12,7 @@ class NICK : public ACommand {
 		~NICK(void);
 
 		// Methods
-		void execute(std::string message) const;
+		void execute(std::string message, Client *client);
 
 	private:
 
@@ -23,6 +23,7 @@ class NICK : public ACommand {
 		// Attributes
 
 		// Methods
+		std::string arranger(std::string message);
 
 
 };

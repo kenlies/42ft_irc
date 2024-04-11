@@ -55,7 +55,7 @@ class Server {
 		void	initListenSocket();
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
-		void	parseMsg(std::string message);
+		void	parseMsg(std::string message, Client *client);
 		Client	*getClientBySocketFd(int socketFd);
 
 

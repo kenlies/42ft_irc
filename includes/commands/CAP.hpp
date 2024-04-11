@@ -12,7 +12,7 @@ class CAP : public ACommand {
 		~CAP(void);
 
 		// Methods
-		void execute(std::string message) const;
+		void execute(std::string message, Client *client);
 
 	private:
 
@@ -23,7 +23,7 @@ class CAP : public ACommand {
 		// Attributes
 
 		// Methods
-
+		std::string arranger(std::string message);
 
 };
 

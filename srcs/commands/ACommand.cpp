@@ -14,3 +14,14 @@ void ACommand::parseMessage(std::string message) {
 		this->parameters.push_back(word);
 	}
 }
+
+void ACommand::sendMsg(std::string message, Client *target) {
+	std::string response = BLUE "Received this: " RESET;
+    response += arranger(message);
+	response += "\n";
+    send(target->getSocketFd(), response.c_str(), response.length(), 0);
+}
+
+std::string ACommand::arranger(std::string message){
+	return (message);
+}
