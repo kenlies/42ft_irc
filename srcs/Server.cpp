@@ -131,15 +131,10 @@ void Server::handleClientData(size_t pollFdIndex) {
 		return ;
     }
 	client->addBufferToMsgBuffer(buffer);
-
 	while (client->validMessage()) {
 		executeCommand(client->getMsgBuffer());
 	}
-	//MIGHT HAVE TO DELETE THIS IN THE END, CHECK THIS AGAIN LATER
-	// if (buffer[0] == '\0' || buffer[0] == '\n' || buffer[0] == '\r')
-	// 	return ;
-    // // Print received message
-    // std::cout << BLUE << "Message from client: " << buffer << RESET << std::endl;
+
 	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
     std::string response = BLUE "Received this: " RESET;
     response += buffer;
@@ -159,9 +154,6 @@ void Server::executeCommand(std::string message) {
 }
 
 std::pair<std::string, std::string> Server::validateCommand(std::string message) {
-	// for (size_t i = 0; i < message.size(); ++i)
-	// 	std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(message[i]) << " ";
-	// std::cout << std::endl;
 	if (message.find("\r\n\0") == std::string::npos) {
 		std::cout << "No CRLF found in the end of the string!" << std::endl;
    		return std::make_pair("", "");
@@ -179,10 +171,11 @@ std::pair<std::string, std::string> Server::validateCommand(std::string message)
 	}
     std::stringstream ss(message);
     std::string command, restOfMessage;
-    if (std::getline(ss, command, ' ')) {
-        std::getline(ss, restOfMessage);
-    }
-	// return std::make_pair(command, restOfMessage.substr(restOfMessage.find_first_not_of(' ')));
+	ss >> command;
+	std::getline(ss, restOfMessage);
+	pos = restOfMessage.find_first_not_of(' ');
+	if (pos != std::string::npos)
+		restOfMessage = restOfMessage.substr(restOfMessage.find_first_not_of(' '));
 	return std::make_pair(command, restOfMessage);
 }
 

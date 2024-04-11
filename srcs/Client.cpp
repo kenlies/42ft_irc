@@ -13,13 +13,19 @@ int Client::getSocketFd(void) {
 
 void Client::addBufferToMsgBuffer(std::string buffer) {
 	if (this->msgBuffer.length() + buffer.length() > 512) {
-		throw std::runtime_error("Error: Message buffer is full!");
+		this->msgBuffer += buffer.substr(0, 512 - this->msgBuffer.length());
+		size_t found = this->msgBuffer.rfind("\r\n");
+		if (found != std::string::npos)
+			this->msgBuffer = this->msgBuffer.substr(0, found);
+		else
+			this->msgBuffer.clear();
+		std::cout << RED << "Error: Message buffer is full!" << std::endl;
 	}
-	this->msgBuffer += buffer;
+	else
+		this->msgBuffer += buffer;
 }
 
 bool Client::validMessage(void) {
-	// if there is a \r\n in the msgBuffer, then the message is valid!
 	if (this->msgBuffer.find("\r\n") != std::string::npos) {
 		return (true);
 	}

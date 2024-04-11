@@ -15,9 +15,11 @@ class Client {
 		~Client(void);
 
 		// Methods
-		int		getSocketFd(void);
-		void 	addBufferToMsgBuffer(std::string buffer);
-		bool	validMessage(void);
+		void 		addBufferToMsgBuffer(std::string buffer);
+		bool		validMessage(void);
+
+		// Getters
+		int			getSocketFd(void);
 		std::string getMsgBuffer(void);
 
 	private:
