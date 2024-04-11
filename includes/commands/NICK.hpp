@@ -12,7 +12,7 @@ class NICK : public ACommand {
 		~NICK(void);
 
 		// Methods
-		void execute(std::string message);
+		void execute(std::string message) const;
 
 	private:
 

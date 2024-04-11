@@ -17,17 +17,17 @@ class ACommand {
 
 		// Constructors and destructors
 		ACommand(void);
+		ACommand &operator=(ACommand const &copy);
 		virtual ~ACommand(void);
 
 		// Methods
-		virtual void	execute(std::string message) = 0;
+		virtual void	execute(std::string message) const = 0;
 		void			parseMessage(std::string message);
 
 	protected:
 
 		// Canonical form
 		ACommand(ACommand const &copy);
-		ACommand &operator=(ACommand const &copy);
 
 		// Attributes
 		std::vector<std::string> parameters;

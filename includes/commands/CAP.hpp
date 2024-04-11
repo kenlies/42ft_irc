@@ -12,7 +12,7 @@ class CAP : public ACommand {
 		~CAP(void);
 
 		// Methods
-		void execute(std::string message);
+		void execute(std::string message) const;
 
 	private:
 

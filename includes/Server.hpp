@@ -1,6 +1,7 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
+//FIXME: Please check if I am neccessary!
 #include "colors.h"
 #include "CAP.hpp"
 #include "NICK.hpp"
@@ -18,8 +19,6 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <map>
-#include <regex>
-#include <memory>
 #include <iomanip>
 
 class Server {
@@ -27,15 +26,15 @@ class Server {
 	public:
 		// Constructors and destructors
 		Server(char *port, char *password);
-		~Server(void);
+		~Server();
 
 		// Methods
-		void	run(void);
+		void	run();
 
 	private:
 
 		// Canonical form
-		Server(void);
+		Server();
 		Server(Server const &copy);
 		Server &operator=(Server const &copy);
 
@@ -46,17 +45,17 @@ class Server {
 		std::vector<pollfd> 	pfds;
 		std::vector<Client *>	clients;
 		std::vector<Channel *>	channels;
-		std::map<std::string, std::unique_ptr<ACommand>> commandList;
+		//FIXME: Commands as static objects????
+		std::map<std::string, ACommand *> commandList;
 
 		// Methods
 		void	validatePort(char *port);
 		void	validatePassword(char *password);
-		void	commandsAvailable(void);
-		void	createListenSocket(void);
+		void	initCommandList();
+		void	initListenSocket();
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
-		void	executeCommand(std::string message);
-		std::pair<std::string, std::string> validateCommand(std::string message);
+		void	parseMsg(std::string message);
 		Client	*getClientBySocketFd(int socketFd);
 
 

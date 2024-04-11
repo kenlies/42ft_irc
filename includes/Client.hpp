@@ -2,9 +2,9 @@
 # define CLIENT_HPP
 
 #include "colors.h"
-#include "Channel.hpp"
 #include <iostream>
-#include <vector>
+
+#define MSG_BUFFER_SIZE 512
 
 class Client {
 
@@ -16,11 +16,11 @@ class Client {
 
 		// Methods
 		void 		addBufferToMsgBuffer(std::string buffer);
-		bool		validMessage(void);
+		bool		msgCompleted(void);
 
 		// Getters
 		int			getSocketFd(void);
-		std::string getMsgBuffer(void);
+		std::string getMsgFromBuffer(void);
 
 	private:
 
@@ -36,7 +36,6 @@ class Client {
 		std::string				username;
 		bool					registered;
 		// std::vector<Channel *>	joinedChannels;
-
 
 		// Methods
 

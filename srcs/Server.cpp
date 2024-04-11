@@ -3,19 +3,19 @@
 Server::Server(char *port, char *password) {
 	validatePort(port);
 	validatePassword(password);
-	createListenSocket();
-	commandsAvailable();
+	initListenSocket();
+	initCommandList();
 }
 
-Server::~Server(void) {
+Server::~Server() {
 }
 
 void	Server::validatePort(char *port) {
 	for (size_t i = 0; i < strlen(port); ++i) {
-		if (!isdigit(port[i]))
+		if (!std::isdigit(port[i]))
 			throw std::runtime_error("Error: Port must be a number!");
 	}
-	int p = atoi(port);
+	int p = std::atoi(port);
 	if (p < 0 || p > 65535)
 		throw std::runtime_error("Error: Port must be between 0 and 65536!");
 	this->port = p;
@@ -29,7 +29,7 @@ void	Server::validatePassword(char *password) {
 	this->password = password;
 }
 
-void	Server::createListenSocket(void) {
+void	Server::initListenSocket() {
 	// Creating socket
 	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->serverSocket == -1)
@@ -61,18 +61,20 @@ void	Server::createListenSocket(void) {
 	pfds.push_back(serverPollfd);
 }
 
-void	Server::commandsAvailable(void) {
-		commandList["CAP"] = std::make_unique<CAP>();
-        commandList["NICK"] = std::make_unique<NICK>();
+void	Server::initCommandList() {
+		commandList["CAP"] = new CAP();
+        commandList["NICK"] = new NICK();
+		//FIXME: Delete me (commandList) in the destructor, please I dont wanna live forever!
 }
 
 void	Server::run() {
     while (true) {
-        // Poll for events on all file descriptors
+        // Poll for events on all sockets
+		// FIXME: should we exit on poll failure, or poll will be fixed??
 		if (poll(pfds.data(), pfds.size(), -1) == -1)
     		throw std::runtime_error("Error: Poll failed!");
 
-        // Iterate over all file descriptors, and handle events
+        // Iterate over all sockets, and handle events
 		for (size_t i = 0; i < pfds.size(); ++i) {
             if (pfds[i].revents & POLLIN) {
                 if (pfds[i].fd == serverSocket) {
@@ -104,11 +106,10 @@ void Server::handleNewConnection() {
 
 	clients.push_back(new Client(clientSocket));
 
-	//GONNA DELETE THE BELOW CODE
-
 	// Print the new client connection
 	std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
 
+	//GONNA DELETE THE BELOW CODE
     // Send welcome message to the client
     std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
     send(clientSocket, message.c_str(), message.length(), 0);
@@ -126,13 +127,13 @@ void Server::handleClientData(size_t pollFdIndex) {
 		close(pfds[pollFdIndex].fd);
 		pfds.erase(pfds.begin() + pollFdIndex);
 
-		//THIS WILL HAVE TO BE A SEPARATE FUNCTION, WHERE WE DELETE THE CLIENT FROM THE LIST OF CHANNELS HE HAS JOINED AND SO ON!
+		//FIXME: Destructor will handle removal of the client from everywhere! // keep the line below for now!
 		clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
 		return ;
     }
 	client->addBufferToMsgBuffer(buffer);
-	while (client->validMessage()) {
-		executeCommand(client->getMsgBuffer());
+	while (client->msgCompleted()) {
+		parseMsg(client->getMsgFromBuffer());
 	}
 
 	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
@@ -141,42 +142,40 @@ void Server::handleClientData(size_t pollFdIndex) {
     send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
 
-void Server::executeCommand(std::string message) {
-	if (message.empty() || message[0] == '\n' || message[0] == '\r')
+// Checks if the command is valid and checks if it can find in the commandList
+void Server::parseMsg(std::string message) {
+	//just check if the message is empty, it has not command to execute!
+	if (message.empty())
 		return ;
-	std::pair<std::string, std::string> command = validateCommand(message);
-	if (!command.first.empty() && commandList.find(command.first) != commandList.end()) {
-		commandList[command.first]->execute(command.second);
-	}
-	else {
-		std::cout << "Command " << command.first << " is not available!" << std::endl;
-	}
-}
 
-std::pair<std::string, std::string> Server::validateCommand(std::string message) {
-	if (message.find("\r\n\0") == std::string::npos) {
-		std::cout << "No CRLF found in the end of the string!" << std::endl;
-   		return std::make_pair("", "");
-	}
-    size_t pos = 0;
-    while ((pos = message.find("\r\n", pos)) != std::string::npos) {
-        message.replace(pos, 2, " ");
-        pos += 1;
-    }
+	// make sure we only have ASCII SPACEs and no other whitespace
 	for (char c : message) {
 		if (std::isspace(c) && c != ' ') {
-			std::cout << "Found other whitespace characters!" << std::endl;
-			return std::make_pair("", "");
+			// FIXME: Handle whitespace errors properly!
+			std::cout << "Error: Found other whitespace characters!" << std::endl;
+			return ;
 		}
 	}
+
+	// split command from parameters
     std::stringstream ss(message);
     std::string command, restOfMessage;
 	ss >> command;
 	std::getline(ss, restOfMessage);
-	pos = restOfMessage.find_first_not_of(' ');
+
+	// remove spaces from the beginning of parameters
+	size_t pos = restOfMessage.find_first_not_of(' ');
 	if (pos != std::string::npos)
 		restOfMessage = restOfMessage.substr(restOfMessage.find_first_not_of(' '));
-	return std::make_pair(command, restOfMessage);
+
+	// execute command if found, or return error
+	if (commandList.find(command) != commandList.end()) {
+		commandList[command]->execute(restOfMessage);
+	}
+	else {
+		// FIXME: Handle invalid commands properly!
+		std::cout << "Command " << command << " is not available!" << std::endl;
+	}
 }
 
 Client *Server::getClientBySocketFd(int socketFd) {
