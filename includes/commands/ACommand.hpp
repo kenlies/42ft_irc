@@ -23,12 +23,9 @@ class ACommand {
 
 		// Methods
 		virtual void	execute(std::string message, Client *client) = 0;
-		void			parseMessage(std::string message);
-		// void			sendMsg(std::string message, Client *source, Client *target);
-		// void			sendMsg(std::string message, Client *source, Channel *target);
+	//	void			parseMessage(std::string message);
 		void			sendMsg(std::string message, Client *target);
 		// void			sendMsg(std::string message, Channel *target);
-		// void			sendMsg(std::string message, Client *source);
 		// void			sendMsg(std::string message);
 
 	protected:
@@ -38,10 +35,18 @@ class ACommand {
 
 		// Attributes
 		Server						*server;
-		std::vector<std::string>	parameters;
+		std::string					command;
+//		std::vector<std::string>	parameters;
 
 		// Methods
-		virtual std::string arranger(std::string message);
+
+		// generic arrangers that could have string or vector of strings as parameter to send as command parameters
+		// We would use them something like this: sendMsg(arranger(source, target_client, "string"), target_client)
+		// virtual std::string arranger(Client *source, Client *target);
+		// virtual std::string arranger(Client *source, Client *target, std::string parameter);
+		// virtual std::string arranger(Client *source, Client *target, std::vector<std::string> parameters);
 };
 
 # endif
+
+
