@@ -8,7 +8,7 @@ class NICK : public ACommand {
 
 	public:
 		// Constructors and destructors
-		NICK(void);
+		NICK(Server *s);
 		~NICK(void);
 
 		// Methods
@@ -17,6 +17,7 @@ class NICK : public ACommand {
 	private:
 
 		// Canonical form
+		NICK(void);
 		NICK(NICK const &copy);
 		NICK &operator=(NICK const &copy);
 

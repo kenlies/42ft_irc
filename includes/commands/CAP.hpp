@@ -8,7 +8,7 @@ class CAP : public ACommand {
 
 	public:
 		// Constructors and destructors
-		CAP(void);
+		CAP(Server *s);
 		~CAP(void);
 
 		// Methods
@@ -17,6 +17,7 @@ class CAP : public ACommand {
 	private:
 
 		// Canonical form
+		CAP(void);
 		CAP(CAP const &copy);
 		CAP &operator=(CAP const &copy);
 

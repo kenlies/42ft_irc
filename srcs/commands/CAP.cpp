@@ -1,6 +1,7 @@
 #include "CAP.hpp"
 
-CAP::CAP(void) {
+CAP::CAP(Server *s) {
+	server = s;
 }
 
 CAP::~CAP(void) {

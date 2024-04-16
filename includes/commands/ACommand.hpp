@@ -37,7 +37,8 @@ class ACommand {
 		ACommand(ACommand const &copy);
 
 		// Attributes
-		std::vector<std::string> parameters;
+		Server						*server;
+		std::vector<std::string>	parameters;
 
 		// Methods
 		virtual std::string arranger(std::string message);

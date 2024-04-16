@@ -1,6 +1,7 @@
 #include "NICK.hpp"
 
-NICK::NICK(void) {
+NICK::NICK(Server *s) {
+	server = s;
 }
 
 NICK::~NICK(void) {

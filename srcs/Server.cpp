@@ -62,8 +62,8 @@ void	Server::initListenSocket() {
 }
 
 void	Server::initCommandList() {
-		commandList["CAP"] = new CAP();
-        commandList["NICK"] = new NICK();
+		commandList["CAP"] = new CAP(this);
+        commandList["NICK"] = new NICK(this);
 		//FIXME: Delete me (commandList) in the destructor, please I dont wanna live forever!
 }
 
