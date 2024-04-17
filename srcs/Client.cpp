@@ -1,5 +1,7 @@
 #include "Client.hpp"
 
+// FIXME catch all exceptions here!!!!!!!!!!
+
 Client::Client(int socketFd) {
 	this->socketFd = socketFd;
 }

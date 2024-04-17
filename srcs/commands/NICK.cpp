@@ -3,6 +3,7 @@
 NICK::NICK(Server *s) {
 	server = s;
 	command = "NICK";
+	server->addCommandToList(command, this);
 }
 
 NICK::~NICK(void) {

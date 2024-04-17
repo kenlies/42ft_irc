@@ -3,11 +3,11 @@
 
 //FIXME: Please check if I am neccessary!
 #include "colors.h"
-#include "CAP.hpp"
-#include "NICK.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
-#include "ACommand.hpp"
+//#include "ACommand.hpp"
+//#include "CAP.hpp"
+//#include "NICK.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <string>
@@ -20,6 +20,9 @@
 #include <fcntl.h>
 #include <map>
 #include <iomanip>
+#include <algorithm>
+
+class ACommand;
 
 class Server {
 
@@ -30,6 +33,7 @@ class Server {
 
 		// Methods
 		void	run();
+		void	addCommandToList(std::string name, ACommand *command);
 
 	private:
 
@@ -57,6 +61,7 @@ class Server {
 		void	handleClientData(size_t pollFdIndex);
 		void	parseMsg(std::string message, Client *client);
 		Client	*getClientBySocketFd(int socketFd);
+
 
 
 };

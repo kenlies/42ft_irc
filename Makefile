@@ -1,6 +1,6 @@
 NAME    = ircserv
 CC      = c++
-CFLAGS  = -Wall -Wextra -Werror -std=c++2a -fsanitize=address -g3
+CFLAGS  = -Wall -Wextra -Werror -std=c++2a #-fsanitize=address -g3
 SRC_D   = srcs/
 INC_D   = includes/
 OBJ_D   = obj/

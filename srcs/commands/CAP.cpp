@@ -3,6 +3,7 @@
 CAP::CAP(Server *s) {
 	server = s;
 	command = "CAP";
+	server->addCommandToList(command, this);
 }
 
 CAP::~CAP(void) {

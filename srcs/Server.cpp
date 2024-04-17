@@ -3,11 +3,19 @@
 Server::Server(char *port, char *password) {
 	validatePort(port);
 	validatePassword(password);
+	//FIXME: check if the objects created are going to be destroyed!
 	initListenSocket();
 	initCommandList();
 }
 
 Server::~Server() {
+	std::for_each(clients.begin(), clients.end(), [](Client *c){delete c;});
+	clients.clear();
+	std::for_each(channels.begin(), channels.end(), [](Channel *c){delete c;});
+	channels.clear();
+	std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
+	commandList.clear();
+	pfds.clear();
 }
 
 void	Server::validatePort(char *port) {
@@ -33,12 +41,12 @@ void	Server::initListenSocket() {
 	// Creating socket
 	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->serverSocket == -1)
-		throw std::runtime_error("Error: Couldn't create server socket!");
+		throw std::runtime_error("Could not create server socket!");
 
 	// Set socket options for reusing addresses and ports
 	int yes = 1;
 	if (setsockopt(this->serverSocket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof yes) == -1)
-		throw std::runtime_error("Error: Couldn't set socket options!");
+		throw std::runtime_error("Could not set socket options!");
 
 	// Specifying the address
 	struct sockaddr_in address;
@@ -48,11 +56,11 @@ void	Server::initListenSocket() {
 
 	// Binding socket
 	if (bind(this->serverSocket, (struct sockaddr *)&address, sizeof(address)) < 0)
-		throw std::runtime_error("Error binding server socket");
+		throw std::runtime_error("Error binding server socket!");
 
 	// Listening to the assigned socket
 	if (listen(this->serverSocket, 5) < 0)
-		throw std::runtime_error("Error listening on server socket");
+		throw std::runtime_error("Error listening on server socket!");
 
 	// Add server socket to the list of file descriptors to be polled
 	pollfd serverPollfd;
@@ -62,9 +70,11 @@ void	Server::initListenSocket() {
 }
 
 void	Server::initCommandList() {
-		commandList["CAP"] = new CAP(this);
-        commandList["NICK"] = new NICK(this);
-		//FIXME: Delete me (commandList) in the destructor, please I dont wanna live forever!
+		// FIXME: Catch all exceptions here
+		// commandList["CAP"] = new CAP(this);
+        // commandList["NICK"] = new NICK(this);
+	///	new CAP(this);
+	//	new NICK(this);
 }
 
 void	Server::run() {
@@ -72,7 +82,7 @@ void	Server::run() {
         // Poll for events on all sockets
 		// FIXME: should we exit on poll failure, or poll will be fixed??
 		if (poll(pfds.data(), pfds.size(), -1) == -1)
-    		throw std::runtime_error("Error: Poll failed!");
+    		throw std::runtime_error("Poll failed!");
 
         // Iterate over all sockets, and handle events
 		for (size_t i = 0; i < pfds.size(); ++i) {
@@ -90,29 +100,52 @@ void	Server::run() {
     close(serverSocket);
 }
 
+void Server::addCommandToList(std::string name, ACommand *command)
+{
+	commandList[name] = command;
+}
+
 void Server::handleNewConnection() {
 	// Accept the new client connection
 	struct sockaddr_storage clientAddress;
 	socklen_t clientAddressSize = sizeof(clientAddress);
     int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
-    if (clientSocket == -1)
-        throw std::runtime_error("Error accepting client connection");
 
-    // Add the client socket to the list of polled file descriptors
-	pollfd clientPollfd;
-	clientPollfd.fd = clientSocket;
-	clientPollfd.events = POLLIN;
-    pfds.push_back(clientPollfd);
+	Client *newClient;
 
-	clients.push_back(new Client(clientSocket));
+	try {
+		if (clientSocket == -1)
+			throw std::runtime_error("Could not accept client connection!");
+		newClient = new Client(clientSocket);
+
+		try {
+			clients.push_back(newClient);
+		}
+		catch (std::bad_alloc) {
+			delete newClient;
+			throw std::runtime_error("Memory allocation for new user object failed!");
+		}
+	}
+	catch (std::exception &e) {
+		std::cerr << RED << "Error creating new client: " << e.what() << RESET << std::endl;
+		return ;
+	}
+
+	try {
+		// Add the client socket to the list of polled file descriptors
+		pollfd clientPollfd;
+		clientPollfd.fd = clientSocket;
+		clientPollfd.events = POLLIN;
+		pfds.push_back(clientPollfd);
+	}
+	catch (std::exception &e) {
+		std::cerr << RED << "Error creating new client: " << e.what() << RESET << std::endl;
+		delete newClient;
+		return ;
+	}
 
 	// Print the new client connection
 	std::cout << GREEN << "New client connected: " << clientSocket << RESET << std::endl;
-
-	//GONNA DELETE THE BELOW CODE
-    // Send welcome message to the client
-    std::string message = ":IRC 001 :Welcome, " + std::to_string(clientSocket) + "!\r\n";
-    send(clientSocket, message.c_str(), message.length(), 0);
 }
 
 void Server::handleClientData(size_t pollFdIndex) {
@@ -129,6 +162,7 @@ void Server::handleClientData(size_t pollFdIndex) {
 
 		//FIXME: Destructor will handle removal of the client from everywhere! // keep the line below for now!
 		clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
+		delete client;
 		return ;
     }
 	client->addBufferToMsgBuffer(buffer);

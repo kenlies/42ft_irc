@@ -4,13 +4,13 @@
 #include "colors.h"
 #include "Client.hpp"
 #include "Channel.hpp"
-// #include "Server.hpp"
+#include "Server.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <sys/socket.h>
 
-class Server;
+//class Server;
 
 class ACommand {
 
