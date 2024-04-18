@@ -1,15 +1,15 @@
-#ifndef NICK_HPP
-# define NICK_HPP
+#ifndef PASS_HPP
+# define PASS_HPP
 
 #include "ACommand.hpp"
 #include <memory>
 
-class NICK : public ACommand {
+class PASS : public ACommand {
 
 	public:
 		// Constructors and destructors
-		NICK(Server *s);
-		~NICK(void);
+		PASS(Server *s);
+		~PASS(void);
 
 		// Methods
 		void execute(std::string message, Client *client);
@@ -17,18 +17,15 @@ class NICK : public ACommand {
 	private:
 
 		// Canonical form
-		NICK(void);
-		NICK(NICK const &copy);
-		NICK &operator=(NICK const &copy);
+		PASS(void);
+		PASS(PASS const &copy);
+		PASS &operator=(PASS const &copy);
 
 		// Attributes
 
 		// Methods
 		std::string arranger();
 
-
 };
-
-
 
 # endif

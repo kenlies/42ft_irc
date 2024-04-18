@@ -23,6 +23,6 @@ void ACommand::sendMsg(std::string message, Client *target) {
     send(target->getSocketFd(), response.c_str(), response.length(), 0);
 }
 
-// std::string ACommand::arranger(std::string message){
+// std::string ACommand::arranger(std::string mes){
 // 	return (message);
 // }

@@ -10,9 +10,10 @@ CAP::~CAP(void) {
 }
 
 void CAP::execute(std::string message, Client *client) {
-	this->sendMsg(arranger(message), client);
+	(void)message;
+	this->sendMsg(arranger(), client);
 }
 
-std::string CAP::arranger(std::string message) {
-	return (this->command + " " + message);
+std::string CAP::arranger() {
+	return (this->command);
 }

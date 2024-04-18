@@ -72,6 +72,8 @@ void	Server::initListenSocket() {
 void	Server::initCommandList() {
 		try {
 			new CAP(this);
+			new ERR_NEEDMOREPARAMS(this);
+			new PASS(this);
 			new NICK(this);
 		}
 		catch (std::bad_alloc) {
@@ -222,4 +224,8 @@ Client *Server::getClientBySocketFd(int socketFd) {
 			return clients[i];
 	}
 	return nullptr;
+}
+
+ACommand *Server::getCommandFromList(std::string command) {
+	return (commandList[command]);
 }

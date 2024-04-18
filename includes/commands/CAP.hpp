@@ -24,7 +24,7 @@ class CAP : public ACommand {
 		// Attributes
 
 		// Methods
-		std::string arranger(std::string message);
+		std::string arranger();
 
 };
 

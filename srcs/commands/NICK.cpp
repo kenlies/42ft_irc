@@ -10,9 +10,10 @@ NICK::~NICK(void) {
 }
 
 void NICK::execute(std::string message, Client *client) {
-	this->sendMsg(arranger(message), client);
+	(void)message;
+	this->sendMsg(arranger(), client);
 }
 
-std::string NICK::arranger(std::string message) {
-	return (this->command + " " + message);
+std::string NICK::arranger() {
+	return (this->command);
 }

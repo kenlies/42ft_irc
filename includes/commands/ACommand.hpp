@@ -11,7 +11,11 @@
 
 class Server;
 class CAP;
+class PASS;
 class NICK;
+
+//Numeric Replies
+class ERR_NEEDMOREPARAMS;
 
 class ACommand {
 
@@ -24,10 +28,13 @@ class ACommand {
 
 		// Methods
 		virtual void	execute(std::string message, Client *client) = 0;
+		virtual std::string		arranger() = 0;
+		// virtual std::string 	arranger(std::string message) = 0;
 	//	void			parseMessage(std::string message);
 		void			sendMsg(std::string message, Client *target);
 		// void			sendMsg(std::string message, Channel *target);
 		// void			sendMsg(std::string message);
+
 
 	protected:
 

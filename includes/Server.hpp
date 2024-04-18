@@ -7,6 +7,8 @@
 #include "Client.hpp"
 #include "ACommand.hpp"
 #include "CAP.hpp"
+#include "PASS.hpp"
+#include "ERR_NEEDMOREPARAMS.hpp"
 #include "NICK.hpp"
 #include <iostream>
 #include <unistd.h>
@@ -32,6 +34,7 @@ class Server {
 		// Methods
 		void	run();
 		void	addCommandToList(std::string name, ACommand *command);
+		ACommand *getCommandFromList(std::string command);
 
 	private:
 
