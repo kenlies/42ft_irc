@@ -36,6 +36,49 @@ bool Client::msgCompleted(void) {
 	return (false);
 }
 
+bool Client::isAllowedUserMode(char mode) {
+	// Modes supported by this server:
+	// +o : oper user mode
+	// +r : registered user mode
+	// Other modes supported by IRC standard:
+	// +i : invisible user mode
+	// +O : local oper user mode
+	// +w : WALLOPS user mode
+
+	std::unordered_set<char> supportedModes = {'o', 'r'};
+
+	if (supportedModes.find(mode) != supportedModes.end())
+		return (true);
+	else
+		return (false);
+}
+
+bool Client::addMode(char mode) {
+	if (!isAllowedUserMode(mode))
+		return (false);
+	try {
+		userMode.insert(mode);
+		return (true);
+	}
+	catch (...) {
+		return (false);
+	}
+}
+
+bool Client::delMode(char mode) {
+	if (!isAllowedUserMode(mode))
+		return (false);
+	userMode.erase(mode);
+	return (true);
+}
+
+bool Client::hasMode(char mode) {
+	if (userMode.find(mode) != userMode.end())
+		return (true);
+	else
+		return (false);
+}
+
 //Getters
 
 int Client::getSocketFd(void) {
