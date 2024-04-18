@@ -4,13 +4,14 @@
 #include "colors.h"
 #include "Client.hpp"
 #include "Channel.hpp"
-#include "Server.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <sys/socket.h>
 
-//class Server;
+class Server;
+class CAP;
+class NICK;
 
 class ACommand {
 
@@ -47,6 +48,5 @@ class ACommand {
 		// virtual std::string arranger(Client *source, Client *target, std::vector<std::string> parameters);
 };
 
+#include "Server.hpp"
 # endif
-
-

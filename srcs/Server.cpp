@@ -73,8 +73,8 @@ void	Server::initCommandList() {
 		// FIXME: Catch all exceptions here
 		// commandList["CAP"] = new CAP(this);
         // commandList["NICK"] = new NICK(this);
-	///	new CAP(this);
-	//	new NICK(this);
+		new CAP(this);
+		new NICK(this);
 }
 
 void	Server::run() {

@@ -5,9 +5,9 @@
 #include "colors.h"
 #include "Channel.hpp"
 #include "Client.hpp"
-//#include "ACommand.hpp"
-//#include "CAP.hpp"
-//#include "NICK.hpp"
+#include "ACommand.hpp"
+#include "CAP.hpp"
+#include "NICK.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <string>
@@ -21,8 +21,6 @@
 #include <map>
 #include <iomanip>
 #include <algorithm>
-
-class ACommand;
 
 class Server {
 
