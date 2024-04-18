@@ -14,9 +14,12 @@ OBJS    = $(addprefix $(OBJ_D), $(OBJ))
 
 INC     = -I$(INC_D) -I$(INC_D)commands/
 
+HEADERS = $(INC_D)/Server.hpp $(INC_D)/Client.hpp $(INC_D)/Channel.hpp \
+          $(INC_D)/commands/ACommand.hpp $(INC_D)/commands/CAP.hpp $(INC_D)/commands/NICK.hpp
+
 all: $(NAME)
 
-$(OBJ_D)%.o: $(SRC_D)%.cpp
+$(OBJ_D)%.o: $(SRC_D)%.cpp $(HEADERS)
 	mkdir -p $(OBJ_D)
 	mkdir -p $(OBJ_D)commands
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
