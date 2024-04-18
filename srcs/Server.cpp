@@ -84,21 +84,23 @@ void	Server::initCommandList() {
 void	Server::run() {
     while (true) {
         // Poll for events on all sockets
-		// FIXME: should we exit on poll failure, or poll will be fixed??
-		if (poll(pfds.data(), pfds.size(), -1) == -1)
-    		throw std::runtime_error("Poll failed!");
 
-        // Iterate over all sockets, and handle events
-		for (size_t i = 0; i < pfds.size(); ++i) {
-            if (pfds[i].revents & POLLIN) {
-                if (pfds[i].fd == serverSocket) {
-                    handleNewConnection();
-                }
-				else {
-					handleClientData(i);
+		if (poll(pfds.data(), pfds.size(), 5000) == -1)
+			std::cerr << RED << "poll() failed!" << RESET << std::endl;
+		else
+		{
+			// Iterate over all sockets, and handle events
+			for (size_t i = 0; i < pfds.size(); ++i) {
+				if (pfds[i].revents & POLLIN) {
+					if (pfds[i].fd == serverSocket) {
+						handleNewConnection();
+					}
+					else {
+						handleClientData(i);
+					}
 				}
-            }
-        }
+			}
+		}
     }
 	// Close the server socket when done
     close(serverSocket);
