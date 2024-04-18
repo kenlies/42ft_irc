@@ -3,7 +3,6 @@
 Server::Server(char *port, char *password) {
 	validatePort(port);
 	validatePassword(password);
-	//FIXME: check if the objects created are going to be destroyed!
 	initListenSocket();
 	initCommandList();
 }
@@ -70,40 +69,42 @@ void	Server::initListenSocket() {
 }
 
 void	Server::initCommandList() {
-		try {
-			new CAP(this);
-			new ERR_NEEDMOREPARAMS(this);
-			new PASS(this);
-			new NICK(this);
-		}
-		catch (std::bad_alloc) {
-			std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
-			commandList.clear();
-			throw std::runtime_error("Error allocating memory for command list");
-		}
+	try {
+		new CAP(this);
+		new ERR_NEEDMOREPARAMS(this);
+		new PASS(this);
+		new NICK(this);
+	}
+	catch (std::bad_alloc) {
+		std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
+		commandList.clear();
+		throw std::runtime_error("Error allocating memory for command list");
+	}
 }
 
 void	Server::run() {
-    while (true) {
-        // Poll for events on all sockets
-		// FIXME: should we exit on poll failure, or poll will be fixed??
-		if (poll(pfds.data(), pfds.size(), -1) == -1)
-    		throw std::runtime_error("Poll failed!");
+	while (true) {
+		// Poll for events on all sockets
 
-        // Iterate over all sockets, and handle events
-		for (size_t i = 0; i < pfds.size(); ++i) {
-            if (pfds[i].revents & POLLIN) {
-                if (pfds[i].fd == serverSocket) {
-                    handleNewConnection();
-                }
-				else {
-					handleClientData(i);
+		if (poll(pfds.data(), pfds.size(), 5000) == -1)
+			std::cerr << RED << "poll() failed!" << RESET << std::endl;
+		else
+		{
+			// Iterate over all sockets, and handle events
+			for (size_t i = 0; i < pfds.size(); ++i) {
+				if (pfds[i].revents & POLLIN) {
+					if (pfds[i].fd == serverSocket) {
+						handleNewConnection();
+					}
+					else {
+						handleClientData(i);
+					}
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 	// Close the server socket when done
-    close(serverSocket);
+	close(serverSocket);
 }
 
 void Server::addCommandToList(std::string name, ACommand *command)
@@ -115,7 +116,7 @@ void Server::handleNewConnection() {
 	// Accept the new client connection
 	struct sockaddr_storage clientAddress;
 	socklen_t clientAddressSize = sizeof(clientAddress);
-    int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
+	int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
 
 	Client *newClient;
 
@@ -158,28 +159,27 @@ void Server::handleClientData(size_t pollFdIndex) {
 	//get client from the list of clients based on the pollFdIndex
 	Client *client = getClientBySocketFd(pfds[pollFdIndex].fd);
 	// Receive data from the client
-    char buffer[512] = { 0 };
-    int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
-    if (nbytes <= 0) {
+	char buffer[512] = { 0 };
+	int nbytes = recv(pfds[pollFdIndex].fd, buffer, sizeof(buffer) - 1, 0);
+	if (nbytes <= 0) {
 		// Print the client disconnection
 		std::cout << RED << "Client disconnected: " << pfds[pollFdIndex].fd << RESET << std::endl;
 		close(pfds[pollFdIndex].fd);
 		pfds.erase(pfds.begin() + pollFdIndex);
 
-		//FIXME: Destructor will handle removal of the client from everywhere! // keep the line below for now!
 		clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
 		delete client;
 		return ;
-    }
+	}
 	client->addBufferToMsgBuffer(buffer);
 	while (client->msgCompleted()) {
 		parseMsg(client->getMsgFromBuffer(), client);
 	}
 
 	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
-    // std::string response = BLUE "Received this: " RESET;
-    // response += buffer;
-    // send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
+	// std::string response = BLUE "Received this: " RESET;
+	// response += buffer;
+	// send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
 
 // Checks if the command is valid and checks if it can find in the commandList
@@ -198,8 +198,8 @@ void Server::parseMsg(std::string message, Client *client) {
 	}
 
 	// split command from parameters
-    std::stringstream ss(message);
-    std::string command, restOfMessage;
+	std::stringstream ss(message);
+	std::string command, restOfMessage;
 	ss >> command;
 	std::getline(ss, restOfMessage);
 

@@ -6,6 +6,8 @@
 
 #define MSG_BUFFER_SIZE 512
 
+#include <unordered_set>
+
 class Client {
 
 	public:
@@ -17,10 +19,14 @@ class Client {
 		// Methods
 		void 		addBufferToMsgBuffer(std::string buffer);
 		bool		msgCompleted(void);
+		bool		isAllowedUserMode(char mode);
+		bool		addMode(char mode);
+		bool		delMode(char mode);
+		bool		hasMode(char mode);
 
 		// Getters
 		int			getSocketFd(void);
-		std::string getMsgFromBuffer(void);
+		std::string	getMsgFromBuffer(void);
 
 	private:
 
@@ -34,11 +40,10 @@ class Client {
 		std::string				msgBuffer;
 		std::string				nickname;
 		std::string				username;
-		bool					registered;
+		std::unordered_set<char>		userMode;
 		// std::vector<Channel *>	joinedChannels;
 
 		// Methods
-
 };
 
 # endif
