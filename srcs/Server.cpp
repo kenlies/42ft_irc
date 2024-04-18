@@ -70,11 +70,15 @@ void	Server::initListenSocket() {
 }
 
 void	Server::initCommandList() {
-		// FIXME: Catch all exceptions here
-		// commandList["CAP"] = new CAP(this);
-        // commandList["NICK"] = new NICK(this);
-		new CAP(this);
-		new NICK(this);
+		try {
+			new CAP(this);
+			new NICK(this);
+		}
+		catch (std::bad_alloc) {
+			std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
+			commandList.clear();
+			throw std::runtime_error("Error allocating memory for command list");
+		}
 }
 
 void	Server::run() {
