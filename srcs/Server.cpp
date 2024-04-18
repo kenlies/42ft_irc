@@ -3,7 +3,6 @@
 Server::Server(char *port, char *password) {
 	validatePort(port);
 	validatePassword(password);
-	//FIXME: check if the objects created are going to be destroyed!
 	initListenSocket();
 	initCommandList();
 }
@@ -166,7 +165,6 @@ void Server::handleClientData(size_t pollFdIndex) {
 		close(pfds[pollFdIndex].fd);
 		pfds.erase(pfds.begin() + pollFdIndex);
 
-		//FIXME: Destructor will handle removal of the client from everywhere! // keep the line below for now!
 		clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
 		delete client;
 		return ;
