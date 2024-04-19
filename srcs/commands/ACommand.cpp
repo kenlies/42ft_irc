@@ -6,6 +6,11 @@ ACommand::ACommand(void) {
 ACommand::~ACommand(void) {
 }
 
+ACommand &ACommand::operator = (ACommand const &copy) {
+	(void)copy;
+	return (*this);
+}
+
 /* void ACommand::parseMessage(std::string message) {
 	//split them based on the spaces
 	std::stringstream ss(message);

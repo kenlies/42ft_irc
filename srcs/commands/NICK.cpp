@@ -1,9 +1,9 @@
 #include "NICK.hpp"
 
-NICK::NICK(Server *s) {
-	server = s;
+NICK::NICK(void) {
+//	server = s;
 	command = "NICK";
-	server->addCommandToList(command, this);
+//	server->addCommandToList(command, this);
 }
 
 NICK::~NICK(void) {

@@ -4,7 +4,10 @@ Server::Server(char *port, char *password) {
 	validatePort(port);
 	validatePassword(password);
 	initListenSocket();
-	initCommandList();
+//	initCommandList();
+
+	//FIXME check for bad_alloc exception
+	commands = new Commands(this);
 }
 
 Server::~Server() {
@@ -12,8 +15,10 @@ Server::~Server() {
 	clients.clear();
 	std::for_each(channels.begin(), channels.end(), [](Channel *c){delete c;});
 	channels.clear();
-	std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
-	commandList.clear();
+//	std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
+//	commandList.clear();
+
+	delete commands;
 	pfds.clear();
 }
 
@@ -68,7 +73,7 @@ void	Server::initListenSocket() {
 	pfds.push_back(serverPollfd);
 }
 
-void	Server::initCommandList() {
+/* void	Server::initCommandList() {
 	try {
 		new CAP(this);
 		new ERR_NEEDMOREPARAMS(this);
@@ -80,7 +85,7 @@ void	Server::initCommandList() {
 		commandList.clear();
 		throw std::runtime_error("Error allocating memory for command list");
 	}
-}
+} */
 
 void	Server::run() {
 	while (true) {
@@ -107,10 +112,10 @@ void	Server::run() {
 	close(serverSocket);
 }
 
-void Server::addCommandToList(std::string name, ACommand *command)
+/* void Server::addCommandToList(std::string name, ACommand *command)
 {
 	commandList[name] = command;
-}
+} */
 
 void Server::handleNewConnection() {
 	// Accept the new client connection
@@ -209,13 +214,17 @@ void Server::parseMsg(std::string message, Client *client) {
 		restOfMessage = restOfMessage.substr(restOfMessage.find_first_not_of(' '));
 
 	// execute command if found, or return error
-	if (commandList.find(command) != commandList.end()) {
-		commandList[command]->execute(restOfMessage, client);
+	//FIXME check that command we get is present in commandList
+	if (commands->getCommandFromList(command)) {
+		std::cout << "Command " << command << " go here lol" << std::endl;
+		commands->getCommandFromList(command)->execute(restOfMessage, client);
 	}
 	else {
 		// FIXME: Handle invalid commands properly!
 		std::cout << "Command " << command << " is not available!" << std::endl;
 	}
+	//std::cout << "Command " << command << " command" << std::endl;
+	(void)client;
 }
 
 Client *Server::getClientBySocketFd(int socketFd) {
@@ -226,6 +235,7 @@ Client *Server::getClientBySocketFd(int socketFd) {
 	return nullptr;
 }
 
-ACommand *Server::getCommandFromList(std::string command) {
+/* ACommand *Server::getCommandFromList(std::string command) {
 	return (commandList[command]);
 }
+ */

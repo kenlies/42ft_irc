@@ -8,16 +8,16 @@ class NICK : public ACommand {
 
 	public:
 		// Constructors and destructors
-		NICK(Server *s);
+	//	NICK(Server *s);
 		~NICK(void);
 
 		// Methods
 		void execute(std::string message, Client *client);
+		NICK(void);
 
 	private:
 
 		// Canonical form
-		NICK(void);
 		NICK(NICK const &copy);
 		NICK &operator=(NICK const &copy);
 

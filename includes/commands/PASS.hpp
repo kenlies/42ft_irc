@@ -2,24 +2,26 @@
 # define PASS_HPP
 
 #include "ACommand.hpp"
+#include "Commands.hpp"
 #include <memory>
+//#include "Server.hpp"
 
 class PASS : public ACommand {
 
 	public:
 		// Constructors and destructors
-		PASS(Server *s);
+		PASS(void);
+		PASS(Commands *c);
 		~PASS(void);
 
 		// Methods
 		void execute(std::string message, Client *client);
 
+		PASS &operator=(PASS const &copy);
 	private:
 
 		// Canonical form
-		PASS(void);
 		PASS(PASS const &copy);
-		PASS &operator=(PASS const &copy);
 
 		// Attributes
 

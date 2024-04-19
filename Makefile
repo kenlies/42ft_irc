@@ -1,11 +1,11 @@
 NAME    = ircserv
 CC      = c++
-CFLAGS  = -Wall -Wextra -Werror -std=c++17 #-fsanitize=address -g3
+CFLAGS  = -Wall -Wextra -Werror -std=c++17 -fsanitize=address -g3
 SRC_D   = srcs/
 INC_D   = includes/
 OBJ_D   = obj/
 
-SRC     = main.cpp Server.cpp Client.cpp Channel.cpp \
+SRC     = main.cpp Server.cpp Client.cpp Channel.cpp Commands.cpp \
 		./commands/ACommand.cpp ./commands/CAP.cpp ./commands/PASS.cpp ./commands/NICK.cpp \
 		./commands/ERR_NEEDMOREPARAMS.cpp
 
@@ -15,7 +15,7 @@ OBJS    = $(addprefix $(OBJ_D), $(OBJ))
 
 INC     = -I$(INC_D) -I$(INC_D)commands/
 
-HEADERS = $(INC_D)/Server.hpp $(INC_D)/Client.hpp $(INC_D)/Channel.hpp \
+HEADERS = $(INC_D)/Server.hpp $(INC_D)/Client.hpp $(INC_D)/Channel.hpp $(INC_D)/Commands.hpp \
           $(INC_D)/commands/ACommand.hpp $(INC_D)/commands/CAP.hpp $(INC_D)/commands/PASS.hpp \
 		  $(INC_D)/commands/NICK.hpp \
 		  $(INC_D)/commands/ERR_NEEDMOREPARAMS.hpp

@@ -5,11 +5,6 @@
 #include "colors.h"
 #include "Channel.hpp"
 #include "Client.hpp"
-#include "ACommand.hpp"
-#include "CAP.hpp"
-#include "PASS.hpp"
-#include "ERR_NEEDMOREPARAMS.hpp"
-#include "NICK.hpp"
 #include <iostream>
 #include <unistd.h>
 #include <string>
@@ -24,6 +19,8 @@
 #include <iomanip>
 #include <algorithm>
 
+class Commands;
+
 class Server {
 
 	public:
@@ -33,8 +30,8 @@ class Server {
 
 		// Methods
 		void	run();
-		void	addCommandToList(std::string name, ACommand *command);
-		ACommand *getCommandFromList(std::string command);
+	//	void	addCommandToList(std::string name, ACommand *command);
+	//	ACommand *getCommandFromList(std::string command);
 
 	private:
 
@@ -50,13 +47,12 @@ class Server {
 		std::vector<pollfd> 	pfds;
 		std::vector<Client *>	clients;
 		std::vector<Channel *>	channels;
-		//FIXME: Commands as static objects????
-		std::map<std::string, ACommand *> commandList;
+		Commands				*commands;
 
 		// Methods
 		void	validatePort(char *port);
 		void	validatePassword(char *password);
-		void	initCommandList();
+		//void	initCommandList();
 		void	initListenSocket();
 		void	handleNewConnection();
 		void	handleClientData(size_t pollFdIndex);
@@ -66,5 +62,7 @@ class Server {
 
 
 };
+
+#include "Commands.hpp"
 
 # endif

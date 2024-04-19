@@ -9,12 +9,17 @@
 #include <sstream>
 #include <sys/socket.h>
 
-class Server;
-class CAP;
-class PASS;
-class NICK;
+
+//class Server;
+
+//class CAP;
+//class PASS;
+//class NICK;
 
 //Numeric Replies
+
+class Commands;
+
 class ERR_NEEDMOREPARAMS;
 
 class ACommand {
@@ -42,9 +47,10 @@ class ACommand {
 		ACommand(ACommand const &copy);
 
 		// Attributes
-		Server						*server;
+//		Server						*server;
 		std::string					command;
 //		std::vector<std::string>	parameters;
+		Commands					*commands;
 
 		// Methods
 
@@ -55,5 +61,6 @@ class ACommand {
 		// virtual std::string arranger(Client *source, Client *target, std::vector<std::string> parameters);
 };
 
-#include "Server.hpp"
+#include "Commands.hpp"
+//#include "Server.hpp"
 # endif
