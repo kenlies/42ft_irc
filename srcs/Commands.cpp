@@ -9,16 +9,16 @@ Commands::Commands(Server *s) {
 	errNeedMoreParams = new ERR_NEEDMOREPARAMS();
 
 	commandList["PASS"] = this->pass;
+	commandList["NICK"] = this->nick;
+	commandList["CAP"] = this->cap;
 	commandList["ERR_NEEDMOREPARAMS"] = this->errNeedMoreParams;
 }
 
 Commands::~Commands() {
 	delete pass;
+	delete nick;
+	delete cap;
 	delete errNeedMoreParams;
-}
-
-ACommand *Commands::getCommandFromList(std::string command) {
-	return (commandList[command]);
 }
 
 void Commands::sendCommand(std::string message, Client *target) {
@@ -40,4 +40,10 @@ void Commands::sendCommand(std::string message) {
 	// send command to every client in server
 	(void)message;
 	return ;
+}
+
+ACommand *Commands::getCommandFromList(std::string command) {
+	if (commandList.find(command) != commandList.end())
+		return (commandList[command]);
+	return (nullptr);
 }

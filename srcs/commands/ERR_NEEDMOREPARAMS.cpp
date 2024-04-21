@@ -13,5 +13,5 @@ ERR_NEEDMOREPARAMS &ERR_NEEDMOREPARAMS::operator = (ERR_NEEDMOREPARAMS const &co
 }
 
 std::string ERR_NEEDMOREPARAMS::arranger(std::string sourceCommand) {
-	return (command + sourceCommand + " :Not enough parameters");
+	return (command + " " + sourceCommand + " :Not enough parameters");
 }

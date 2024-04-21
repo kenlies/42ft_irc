@@ -4,19 +4,21 @@ Server::Server(char *port, char *password) {
 	validatePort(port);
 	validatePassword(password);
 	initListenSocket();
-//	initCommandList();
 
-	//FIXME check for bad_alloc exception
-	commands = new Commands(this);
+	try {
+		commands = new Commands(this);
+	}
+	catch (std::bad_alloc) {
+		throw std::runtime_error("Memory allocation for commands object failed!");
+	}
 }
 
 Server::~Server() {
 	std::for_each(clients.begin(), clients.end(), [](Client *c){delete c;});
 	clients.clear();
+
 	std::for_each(channels.begin(), channels.end(), [](Channel *c){delete c;});
 	channels.clear();
-//	std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
-//	commandList.clear();
 
 	delete commands;
 	pfds.clear();
@@ -73,20 +75,6 @@ void	Server::initListenSocket() {
 	pfds.push_back(serverPollfd);
 }
 
-/* void	Server::initCommandList() {
-	try {
-		new CAP(this);
-		new ERR_NEEDMOREPARAMS(this);
-		new PASS(this);
-		new NICK(this);
-	}
-	catch (std::bad_alloc) {
-		std::for_each(commandList.begin(), commandList.end(), [](std::pair<std::string, ACommand*> p){delete p.second;});
-		commandList.clear();
-		throw std::runtime_error("Error allocating memory for command list");
-	}
-} */
-
 void	Server::run() {
 	while (true) {
 		// Poll for events on all sockets
@@ -111,11 +99,6 @@ void	Server::run() {
 	// Close the server socket when done
 	close(serverSocket);
 }
-
-/* void Server::addCommandToList(std::string name, ACommand *command)
-{
-	commandList[name] = command;
-} */
 
 void Server::handleNewConnection() {
 	// Accept the new client connection
@@ -161,7 +144,7 @@ void Server::handleNewConnection() {
 }
 
 void Server::handleClientData(size_t pollFdIndex) {
-	//get client from the list of clients based on the pollFdIndex
+	// get client from the list of clients based on the pollFdIndex
 	Client *client = getClientBySocketFd(pfds[pollFdIndex].fd);
 	// Receive data from the client
 	char buffer[512] = { 0 };
@@ -180,24 +163,18 @@ void Server::handleClientData(size_t pollFdIndex) {
 	while (client->msgCompleted()) {
 		parseMsg(client->getMsgFromBuffer(), client);
 	}
-
-	//DELETE THIS IN THE END, ALSO SEND IS GONNA BE INSIDE EACH COMMAND!
-	// std::string response = BLUE "Received this: " RESET;
-	// response += buffer;
-	// send(pfds[pollFdIndex].fd, response.c_str(), response.length(), 0);
 }
 
 // Checks if the command is valid and checks if it can find in the commandList
 void Server::parseMsg(std::string message, Client *client) {
-	//just check if the message is empty, it has not command to execute!
 	if (message.empty())
 		return ;
 
 	// make sure we only have ASCII SPACEs and no other whitespace
 	for (char c : message) {
 		if (std::isspace(c) && c != ' ') {
-			// FIXME: Handle whitespace errors properly!
-			std::cout << "Error: Found other whitespace characters!" << std::endl;
+			// FIXME: Handle whitespace errors properly! remove the line below and send the necessary command
+			std::cerr << "Error: Found other whitespace characters!" << std::endl;
 			return ;
 		}
 	}
@@ -213,8 +190,7 @@ void Server::parseMsg(std::string message, Client *client) {
 	if (pos != std::string::npos)
 		restOfMessage = restOfMessage.substr(restOfMessage.find_first_not_of(' '));
 
-	// handleCommand command if found, or return error
-	//FIXME check that command we get is present in commandList
+	//FIXME don't do the same thing below twice
 	if (commands->getCommandFromList(command)) {
 		commands->getCommandFromList(command)->handleCommand(restOfMessage, client);
 	}
@@ -222,8 +198,6 @@ void Server::parseMsg(std::string message, Client *client) {
 		// FIXME: Handle invalid commands properly!
 		std::cout << "Command " << command << " is not available!" << std::endl;
 	}
-	//std::cout << "Command " << command << " command" << std::endl;
-	(void)client;
 }
 
 Client *Server::getClientBySocketFd(int socketFd) {
@@ -233,8 +207,3 @@ Client *Server::getClientBySocketFd(int socketFd) {
 	}
 	return nullptr;
 }
-
-/* ACommand *Server::getCommandFromList(std::string command) {
-	return (commandList[command]);
-}
- */

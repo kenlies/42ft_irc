@@ -1,11 +1,9 @@
 #ifndef ERR_NEEDMOREPARAMS_HPP
 # define ERR_NEEDMOREPARAMS_HPP
 
-#include "ACommand.hpp"
-#include <memory>
+# include "ACommand.hpp"
 
 class ERR_NEEDMOREPARAMS : public ACommand {
-
 	public:
 		ERR_NEEDMOREPARAMS(void);
 		~ERR_NEEDMOREPARAMS(void);
@@ -19,4 +17,4 @@ class ERR_NEEDMOREPARAMS : public ACommand {
 
 };
 
-# endif
+#endif

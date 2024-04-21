@@ -30,9 +30,8 @@ void Client::addBufferToMsgBuffer(std::string buffer) {
 }
 
 bool Client::msgCompleted(void) {
-	if (this->msgBuffer.find("\r\n") != std::string::npos) {
+	if (this->msgBuffer.find("\r\n") != std::string::npos)
 		return (true);
-	}
 	return (false);
 }
 
@@ -49,8 +48,7 @@ bool Client::isAllowedUserMode(char mode) {
 
 	if (supportedModes.find(mode) != supportedModes.end())
 		return (true);
-	else
-		return (false);
+	return (false);
 }
 
 bool Client::addMode(char mode) {
@@ -75,11 +73,8 @@ bool Client::delMode(char mode) {
 bool Client::hasMode(char mode) {
 	if (userMode.find(mode) != userMode.end())
 		return (true);
-	else
-		return (false);
+	return (false);
 }
-
-//Getters
 
 int Client::getSocketFd(void) {
 	return (this->socketFd);

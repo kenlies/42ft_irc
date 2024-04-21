@@ -1,10 +1,10 @@
 #ifndef COMMANDS_HPP
-#define COMMANDS_HPP
+# define COMMANDS_HPP
 
-#include "ACommand.hpp"
-#include "Server.hpp"
-#include "Channel.hpp"
-#include <unordered_map>
+# include "ACommand.hpp"
+# include "Server.hpp"
+# include "Channel.hpp"
+# include <unordered_map>
 
 class PASS;
 class NICK;
@@ -36,9 +36,9 @@ class Commands {
 		std::unordered_map<std::string, ACommand*>	commandList;
 };
 
-#include "PASS.hpp"
-#include "NICK.hpp"
-#include "CAP.hpp"
-#include "ERR_NEEDMOREPARAMS.hpp"
+# include "PASS.hpp"
+# include "NICK.hpp"
+# include "CAP.hpp"
+# include "ERR_NEEDMOREPARAMS.hpp"
 
 #endif
