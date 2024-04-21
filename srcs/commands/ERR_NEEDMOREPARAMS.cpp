@@ -1,7 +1,7 @@
 #include "ERR_NEEDMOREPARAMS.hpp"
 
 ERR_NEEDMOREPARAMS::ERR_NEEDMOREPARAMS(void) {
-	command = "ERR_NEEDMOREPARAMS";
+	command = "461";
 }
 
 ERR_NEEDMOREPARAMS::~ERR_NEEDMOREPARAMS(void) {
@@ -12,11 +12,6 @@ ERR_NEEDMOREPARAMS &ERR_NEEDMOREPARAMS::operator = (ERR_NEEDMOREPARAMS const &co
 	return (*this);
 }
 
-void ERR_NEEDMOREPARAMS::execute(std::string message, Client *source) {
-	(void)message;
-	(void)source;
-}
-
-std::string ERR_NEEDMOREPARAMS::arranger() {
-	return (command + " :Not enough parameters");
+std::string ERR_NEEDMOREPARAMS::arranger(std::string sourceCommand) {
+	return (command + sourceCommand + " :Not enough parameters");
 }

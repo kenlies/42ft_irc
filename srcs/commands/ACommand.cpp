@@ -6,11 +6,6 @@ ACommand::ACommand(void) {
 ACommand::~ACommand(void) {
 }
 
-ACommand &ACommand::operator = (ACommand const &copy) {
-	(void)copy;
-	return (*this);
-}
-
 /* void ACommand::parseMessage(std::string message) {
 	//split them based on the spaces
 	std::stringstream ss(message);
@@ -20,6 +15,7 @@ ACommand &ACommand::operator = (ACommand const &copy) {
 	}
 } */
 
-// std::string ACommand::arranger(std::string mes){
-// 	return (message);
-// }
+void ACommand::handleCommand(std::string message, Client *source) {
+	(void)message;
+	(void)source;
+}

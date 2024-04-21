@@ -7,28 +7,17 @@
 class NICK : public ACommand {
 
 	public:
-		// Constructors and destructors
-		NICK(void);
-	//	NICK(Commands *c);
+		NICK(Commands *c);
 		~NICK(void);
 
-		// Methods
-		void execute(std::string message, Client *source);
-
-	private:
-
-		// Canonical form
-		NICK(NICK const &copy);
 		NICK &operator=(NICK const &copy);
 
-		// Attributes
+		void handleCommand(std::string message, Client *source);
+		std::string arranger(void);
 
-		// Methods
-		std::string arranger();
-
-
+	private:
+		NICK(void);
+		NICK(NICK const &copy);
 };
-
-
 
 # endif

@@ -4,15 +4,17 @@ Commands::Commands(Server *s) {
 	server = s;
 
 	pass = new PASS(this);
-	errNeedmoreparams = new ERR_NEEDMOREPARAMS();
+	nick = new NICK(this);
+	cap = new CAP(this);
+	errNeedMoreParams = new ERR_NEEDMOREPARAMS();
 
 	commandList["PASS"] = this->pass;
-	commandList["ERR_NEEDMOREPARAMS"] = this->errNeedmoreparams;
+	commandList["ERR_NEEDMOREPARAMS"] = this->errNeedMoreParams;
 }
 
 Commands::~Commands() {
 	delete pass;
-	delete errNeedmoreparams;
+	delete errNeedMoreParams;
 }
 
 ACommand *Commands::getCommandFromList(std::string command) {

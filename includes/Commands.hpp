@@ -7,6 +7,8 @@
 #include <unordered_map>
 
 class PASS;
+class NICK;
+class CAP;
 class ERR_NEEDMOREPARAMS;
 
 class Commands {
@@ -22,7 +24,9 @@ class Commands {
 		void		sendCommand(std::string message);
 
 		PASS				*pass;
-		ERR_NEEDMOREPARAMS	*errNeedmoreparams;
+		NICK				*nick;
+		CAP					*cap;
+		ERR_NEEDMOREPARAMS	*errNeedMoreParams;
 
 	private:
 		Commands();
@@ -33,6 +37,8 @@ class Commands {
 };
 
 #include "PASS.hpp"
+#include "NICK.hpp"
+#include "CAP.hpp"
 #include "ERR_NEEDMOREPARAMS.hpp"
 
 #endif

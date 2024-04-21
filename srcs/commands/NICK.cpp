@@ -1,13 +1,19 @@
 #include "NICK.hpp"
 
-NICK::NICK(void) {
+NICK::NICK(Commands *c) {
+	commands = c;
 	command = "NICK";
 }
 
 NICK::~NICK(void) {
 }
 
-void NICK::execute(std::string message, Client *source) {
+NICK &NICK::operator = (NICK const &copy) {
+	(void)copy;
+	return (*this);
+}
+
+void NICK::handleCommand(std::string message, Client *source) {
 	(void)message;
 	commands->sendCommand(arranger(), source);
 }

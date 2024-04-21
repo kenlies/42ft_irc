@@ -213,11 +213,10 @@ void Server::parseMsg(std::string message, Client *client) {
 	if (pos != std::string::npos)
 		restOfMessage = restOfMessage.substr(restOfMessage.find_first_not_of(' '));
 
-	// execute command if found, or return error
+	// handleCommand command if found, or return error
 	//FIXME check that command we get is present in commandList
 	if (commands->getCommandFromList(command)) {
-		std::cout << "Command " << command << " go here lol" << std::endl;
-		commands->getCommandFromList(command)->execute(restOfMessage, client);
+		commands->getCommandFromList(command)->handleCommand(restOfMessage, client);
 	}
 	else {
 		// FIXME: Handle invalid commands properly!

@@ -7,27 +7,17 @@
 class CAP : public ACommand {
 
 	public:
-		// Constructors and destructors
-		CAP(void);
-	//	CAP(Commands *c);
+		CAP(Commands *c);
 		~CAP(void);
 
-		// Methods
-		void execute(std::string message, Client *source);
-
-	private:
-
-		// Canonical form
-		CAP(CAP const &copy);
 		CAP &operator=(CAP const &copy);
 
-		// Attributes
+		void handleCommand(std::string message, Client *source);
+		std::string arranger(void);
 
-		// Methods
-		std::string arranger();
-
+	private:
+		CAP(void);
+		CAP(CAP const &copy);
 };
-
-
 
 # endif

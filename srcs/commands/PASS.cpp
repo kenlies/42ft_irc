@@ -14,9 +14,9 @@ PASS &PASS::operator = (PASS const &copy) {
 	return (*this);
 }
 
-void PASS::execute(std::string message, Client *source) {
+void PASS::handleCommand(std::string message, Client *source) {
 	if (message.empty())
-		commands->sendCommand(commands->errNeedmoreparams->arranger(), source);
+		commands->sendCommand(commands->errNeedMoreParams->arranger(this->command), source);
 	else
 		commands->sendCommand(arranger(), source);
 }
