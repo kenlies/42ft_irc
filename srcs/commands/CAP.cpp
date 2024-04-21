@@ -1,17 +1,15 @@
 #include "CAP.hpp"
 
 CAP::CAP(void) {
-//	server = s;
 	command = "CAP";
-//	server->addCommandToList(command, this);
 }
 
 CAP::~CAP(void) {
 }
 
-void CAP::execute(std::string message, Client *client) {
+void CAP::execute(std::string message, Client *source) {
 	(void)message;
-	this->sendMsg(arranger(), client);
+	commands->sendCommand(arranger(), source);
 }
 
 std::string CAP::arranger() {

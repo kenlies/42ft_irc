@@ -2,10 +2,8 @@
 #include "ERR_NEEDMOREPARAMS.hpp"
 
 PASS::PASS(Commands *c) {
-//	server = s;
 	commands = c;
 	command = "PASS";
-//	server->addCommandToList(command, this);
 }
 
 PASS::~PASS(void) {
@@ -16,11 +14,11 @@ PASS &PASS::operator = (PASS const &copy) {
 	return (*this);
 }
 
-void PASS::execute(std::string message, Client *client) {
+void PASS::execute(std::string message, Client *source) {
 	if (message.empty())
-		sendMsg(commands->getCommandFromList("ERR_NEEDMOREPARAMS")->arranger(), client);
+		commands->sendCommand(commands->errNeedmoreparams->arranger(), source);
 	else
-		this->sendMsg(arranger(), client);
+		commands->sendCommand(arranger(), source);
 }
 
 std::string PASS::arranger() {

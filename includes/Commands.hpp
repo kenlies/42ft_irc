@@ -3,12 +3,11 @@
 
 #include "ACommand.hpp"
 #include "Server.hpp"
-
-#include "ERR_NEEDMOREPARAMS.hpp"
-
+#include "Channel.hpp"
 #include <unordered_map>
 
 class PASS;
+class ERR_NEEDMOREPARAMS;
 
 class Commands {
 	public:
@@ -17,7 +16,10 @@ class Commands {
 		Commands(Server *s);
 		~Commands();
 
-		ACommand *getCommandFromList(std::string command);
+		ACommand	*getCommandFromList(std::string command);
+		void		sendCommand(std::string message, Client *target);
+		void		sendCommand(std::string message, Channel *target);
+		void		sendCommand(std::string message);
 
 		PASS				*pass;
 		ERR_NEEDMOREPARAMS	*errNeedmoreparams;
@@ -30,13 +32,7 @@ class Commands {
 		std::unordered_map<std::string, ACommand*>	commandList;
 };
 
-
-
-/* Commands.pass->arranes
-
-Commands.commandList
-
-new CAP(this); */
-
 #include "PASS.hpp"
+#include "ERR_NEEDMOREPARAMS.hpp"
+
 #endif

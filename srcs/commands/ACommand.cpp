@@ -20,14 +20,6 @@ ACommand &ACommand::operator = (ACommand const &copy) {
 	}
 } */
 
-void ACommand::sendMsg(std::string message, Client *target) {
-	std::string response = BLUE "Received this: " RESET;
-    response += message;
-	response += "\n";
-
-    send(target->getSocketFd(), response.c_str(), response.length(), 0);
-}
-
 // std::string ACommand::arranger(std::string mes){
 // 	return (message);
 // }

@@ -9,18 +9,7 @@
 #include <sstream>
 #include <sys/socket.h>
 
-
-//class Server;
-
-//class CAP;
-//class PASS;
-//class NICK;
-
-//Numeric Replies
-
 class Commands;
-
-class ERR_NEEDMOREPARAMS;
 
 class ACommand {
 
@@ -32,14 +21,9 @@ class ACommand {
 		virtual ~ACommand(void);
 
 		// Methods
-		virtual void	execute(std::string message, Client *client) = 0;
+		virtual void			execute(std::string message, Client *source) = 0;
 		virtual std::string		arranger() = 0;
 		// virtual std::string 	arranger(std::string message) = 0;
-	//	void			parseMessage(std::string message);
-		void			sendMsg(std::string message, Client *target);
-		// void			sendMsg(std::string message, Channel *target);
-		// void			sendMsg(std::string message);
-
 
 	protected:
 
@@ -47,9 +31,7 @@ class ACommand {
 		ACommand(ACommand const &copy);
 
 		// Attributes
-//		Server						*server;
 		std::string					command;
-//		std::vector<std::string>	parameters;
 		Commands					*commands;
 
 		// Methods
@@ -62,5 +44,5 @@ class ACommand {
 };
 
 #include "Commands.hpp"
-//#include "Server.hpp"
+
 # endif

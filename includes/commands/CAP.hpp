@@ -8,13 +8,13 @@ class CAP : public ACommand {
 
 	public:
 		// Constructors and destructors
-	//	CAP(Server *s);
+		CAP(void);
+	//	CAP(Commands *c);
 		~CAP(void);
 
 		// Methods
-		void execute(std::string message, Client *client);
+		void execute(std::string message, Client *source);
 
-		CAP(void);
 	private:
 
 		// Canonical form

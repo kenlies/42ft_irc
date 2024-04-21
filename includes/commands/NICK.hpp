@@ -8,12 +8,12 @@ class NICK : public ACommand {
 
 	public:
 		// Constructors and destructors
-	//	NICK(Server *s);
+		NICK(void);
+	//	NICK(Commands *c);
 		~NICK(void);
 
 		// Methods
-		void execute(std::string message, Client *client);
-		NICK(void);
+		void execute(std::string message, Client *source);
 
 	private:
 

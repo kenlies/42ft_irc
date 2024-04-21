@@ -4,7 +4,6 @@
 #include "ACommand.hpp"
 #include "Commands.hpp"
 #include <memory>
-//#include "Server.hpp"
 
 class PASS : public ACommand {
 
@@ -15,7 +14,7 @@ class PASS : public ACommand {
 		~PASS(void);
 
 		// Methods
-		void execute(std::string message, Client *client);
+		void execute(std::string message, Client *source);
 
 		PASS &operator=(PASS const &copy);
 	private:

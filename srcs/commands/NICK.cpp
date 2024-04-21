@@ -1,17 +1,15 @@
 #include "NICK.hpp"
 
 NICK::NICK(void) {
-//	server = s;
 	command = "NICK";
-//	server->addCommandToList(command, this);
 }
 
 NICK::~NICK(void) {
 }
 
-void NICK::execute(std::string message, Client *client) {
+void NICK::execute(std::string message, Client *source) {
 	(void)message;
-	this->sendMsg(arranger(), client);
+	commands->sendCommand(arranger(), source);
 }
 
 std::string NICK::arranger() {
