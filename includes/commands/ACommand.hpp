@@ -17,7 +17,7 @@ class ACommand {
 
 		virtual void	handleCommand(std::string message, Client *source);
 
-		//void 			parseMessage(std::string message);
+		std::vector<std::string>	parseMessage(std::string message);
 
 	protected:
 		std::string		command;
