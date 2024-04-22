@@ -8,7 +8,6 @@
 
 class PASS;
 class NICK;
-class CAP;
 class ERR_NEEDMOREPARAMS;
 
 class Commands {
@@ -25,7 +24,6 @@ class Commands {
 
 		PASS				*pass;
 		NICK				*nick;
-		CAP					*cap;
 		ERR_NEEDMOREPARAMS	*errNeedMoreParams;
 
 	private:
@@ -38,7 +36,6 @@ class Commands {
 
 # include "PASS.hpp"
 # include "NICK.hpp"
-# include "CAP.hpp"
 # include "ERR_NEEDMOREPARAMS.hpp"
 
 #endif

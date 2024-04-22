@@ -5,19 +5,16 @@ Commands::Commands(Server *s) {
 
 	pass = new PASS(this);
 	nick = new NICK(this);
-	cap = new CAP(this);
 	errNeedMoreParams = new ERR_NEEDMOREPARAMS();
 
 	commandList["PASS"] = this->pass;
 	commandList["NICK"] = this->nick;
-	commandList["CAP"] = this->cap;
 	commandList["ERR_NEEDMOREPARAMS"] = this->errNeedMoreParams;
 }
 
 Commands::~Commands() {
 	delete pass;
 	delete nick;
-	delete cap;
 	delete errNeedMoreParams;
 }
 
