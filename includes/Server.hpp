@@ -23,6 +23,7 @@ class Server {
 		~Server();
 
 		void	run();
+		bool	checkPassword(std::string input);
 
 	private:
 		Server();

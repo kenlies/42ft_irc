@@ -43,6 +43,12 @@ void	Server::validatePassword(char *password) {
 	this->password = password;
 }
 
+bool Server::checkPassword(std::string input) {
+	if (input == password)
+		return (true);
+	return (false);
+}
+
 void	Server::initListenSocket() {
 	// Creating socket
 	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);

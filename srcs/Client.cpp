@@ -76,6 +76,13 @@ bool Client::hasMode(char mode) {
 	return (false);
 }
 
+void Client::tryToRegister(void) {
+	if (!username.empty() && !nickname.empty() && validPass) {
+		this->addMode('r');
+		//FIXME call function to send the registration response to client
+	}
+}
+
 int Client::getSocketFd(void) {
 	return (this->socketFd);
 }
@@ -84,4 +91,24 @@ std::string Client::getMsgFromBuffer(void) {
 	std::string message = this->msgBuffer.substr(0, this->msgBuffer.find("\r\n"));
 	this->msgBuffer = this->msgBuffer.substr(this->msgBuffer.find("\r\n") + 2);
 	return (message);
+}
+
+std::string Client::getUsername(void) {
+	return (username);
+}
+
+std::string Client::getNickname(void) {
+	return (nickname);
+}
+
+void Client::setUsername(std::string newUsername) {
+	this->username = newUsername;
+}
+
+void Client::setNickname(std::string newNickname) {
+	this->nickname = newNickname;
+}
+
+void Client::setValidPass(void) {
+	this->validPass = true;
 }
