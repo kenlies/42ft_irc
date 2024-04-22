@@ -107,6 +107,7 @@ void Client::setUsername(std::string newUsername) {
 
 void Client::setNickname(std::string newNickname) {
 	this->nickname = newNickname;
+	//FIXME inform other clients about the change
 }
 
 void Client::setValidPass(void) {

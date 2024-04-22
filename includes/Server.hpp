@@ -24,6 +24,7 @@ class Server {
 
 		void	run();
 		bool	checkPassword(std::string input);
+		bool	nickExists(std::string input);
 
 	private:
 		Server();

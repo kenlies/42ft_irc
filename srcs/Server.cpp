@@ -49,6 +49,14 @@ bool Server::checkPassword(std::string input) {
 	return (false);
 }
 
+bool Server::nickExists(std::string input) {
+	for (size_t i = 0; i < clients.size(); ++i) {
+		if (clients[i]->getNickname() == input)
+			return (true);
+	}
+	return (false);
+}
+
 void	Server::initListenSocket() {
 	// Creating socket
 	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -209,7 +217,7 @@ void Server::parseMsg(std::string message, Client *client) {
 Client *Server::getClientBySocketFd(int socketFd) {
 	for (size_t i = 0; i < clients.size(); ++i) {
 		if (clients[i]->getSocketFd() == socketFd)
-			return clients[i];
+			return (clients[i]);
 	}
-	return nullptr;
+	return (nullptr);
 }
