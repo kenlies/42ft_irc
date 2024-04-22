@@ -93,21 +93,29 @@ std::string Client::getMsgFromBuffer(void) {
 	return (message);
 }
 
+std::string Client::getNickname(void) {
+	return (nickname);
+}
+
 std::string Client::getUsername(void) {
 	return (username);
 }
 
-std::string Client::getNickname(void) {
-	return (nickname);
+std::string Client::getRealname(void) {
+	return (realname);
+}
+
+void Client::setNickname(std::string newNickname) {
+	this->nickname = newNickname;
+	//FIXME inform other clients about the change
 }
 
 void Client::setUsername(std::string newUsername) {
 	this->username = newUsername;
 }
 
-void Client::setNickname(std::string newNickname) {
-	this->nickname = newNickname;
-	//FIXME inform other clients about the change
+void Client::setRealname(std::string newRealname) {
+	this->realname = newRealname;
 }
 
 void Client::setValidPass(void) {

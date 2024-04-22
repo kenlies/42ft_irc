@@ -22,11 +22,13 @@ class Client {
 
 		int			getSocketFd(void);
 		std::string	getMsgFromBuffer(void);
-		std::string	getUsername(void);
 		std::string	getNickname(void);
+		std::string	getUsername(void);
+		std::string	getRealname(void);
 
-		void		setUsername(std::string newUsername);
 		void		setNickname(std::string newNickname);
+		void		setUsername(std::string newUsername);
+		void		setRealname(std::string newRealname);
 		void		setValidPass(void);
 
 	private:
@@ -38,6 +40,7 @@ class Client {
 		std::string						msgBuffer;
 		std::string						nickname;
 		std::string						username;
+		std::string						realname;
 		bool							validPass;
 		std::unordered_set<char>		userMode;
 		// std::vector<Channel *>	joinedChannels;
