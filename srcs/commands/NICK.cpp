@@ -19,7 +19,7 @@ void NICK::handleCommand(std::string message, Client *source) {
 		commands->sendCommand(commands->errNoNicknameGiven->arranger(source), source);
 	else if (validateNickname(parameters[0])) {
 		if (commands->server->nickExists(parameters[0]))
-			return; //FIXME send ERR_NICKNAMEINUSE
+			commands->sendCommand(commands->errNicknameInUse->arranger(parameters[0], source), source);
 		else {
 			source->setNickname(parameters[0]);
 			source->tryToRegister();

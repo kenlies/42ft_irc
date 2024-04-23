@@ -10,6 +10,7 @@ Commands::Commands(Server *s) {
 	errAlreadyRegistered = new ERR_ALREADYREGISTERED();
 	errPasswMismatch = new ERR_PASSWDMISMATCH();
 	errNoNicknameGiven = new ERR_NONICKNAMEGIVEN();
+	errNicknameInUse = new ERR_NICKNAMEINUSE();
 
 	commandList["PASS"] = this->pass;
 	commandList["NICK"] = this->nick;
@@ -27,6 +28,7 @@ Commands::~Commands() {
 	delete errNeedMoreParams;
 	delete errAlreadyRegistered;
 	delete errNoNicknameGiven;
+	delete errNicknameInUse;
 }
 
 void Commands::sendCommand(std::string message, Client *target) {
