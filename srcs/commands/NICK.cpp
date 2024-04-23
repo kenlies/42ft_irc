@@ -26,7 +26,7 @@ void NICK::handleCommand(std::string message, Client *source) {
 		}
 	}
 	else
-		return; //FIXME send ERR_ERRONEUSNICKNAME
+		commands->sendCommand(commands->errErroneusNickname->arranger(parameters[0], source), source);
 }
 
 std::string NICK::arranger() {

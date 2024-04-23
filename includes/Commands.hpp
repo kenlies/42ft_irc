@@ -15,6 +15,7 @@ class ERR_ALREADYREGISTERED;
 class ERR_PASSWDMISMATCH;
 class ERR_NONICKNAMEGIVEN;
 class ERR_NICKNAMEINUSE;
+class ERR_ERRONEUSNICKNAME;
 
 class Commands {
 	public:
@@ -36,6 +37,7 @@ class Commands {
 		ERR_PASSWDMISMATCH		*errPasswMismatch;
 		ERR_NONICKNAMEGIVEN		*errNoNicknameGiven;
 		ERR_NICKNAMEINUSE		*errNicknameInUse;
+		ERR_ERRONEUSNICKNAME	*errErroneusNickname;
 
 	private:
 		Commands();
@@ -53,5 +55,6 @@ class Commands {
 # include "ERR_PASSWDMISMATCH.hpp"
 # include "ERR_NONICKNAMEGIVEN.hpp"
 # include "ERR_NICKNAMEINUSE.hpp"
+# include "ERR_ERRONEUSNICKNAME.hpp"
 
 #endif

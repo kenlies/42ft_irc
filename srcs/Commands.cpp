@@ -11,6 +11,7 @@ Commands::Commands(Server *s) {
 	errPasswMismatch = new ERR_PASSWDMISMATCH();
 	errNoNicknameGiven = new ERR_NONICKNAMEGIVEN();
 	errNicknameInUse = new ERR_NICKNAMEINUSE();
+	errErroneusNickname = new ERR_ERRONEUSNICKNAME();
 
 	commandList["PASS"] = this->pass;
 	commandList["NICK"] = this->nick;
@@ -19,6 +20,7 @@ Commands::Commands(Server *s) {
 	commandList["ERR_ALREADYREGISTERED"] = this->errAlreadyRegistered;
 	commandList["ERR_PASSWDMISMATCH"] = this->errPasswMismatch;
 	commandList["ERR_NONICKNAMEGIVEN"] = this->errNoNicknameGiven;
+	commandList["ERR_ERRONEUSNICKNAME"] = this->errErroneusNickname;
 }
 
 Commands::~Commands() {
@@ -29,6 +31,7 @@ Commands::~Commands() {
 	delete errAlreadyRegistered;
 	delete errNoNicknameGiven;
 	delete errNicknameInUse;
+	delete errErroneusNickname;
 }
 
 void Commands::sendCommand(std::string message, Client *target) {
