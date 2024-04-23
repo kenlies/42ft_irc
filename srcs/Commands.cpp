@@ -7,11 +7,15 @@ Commands::Commands(Server *s) {
 	nick = new NICK(this);
 	user = new USER(this);
 	errNeedMoreParams = new ERR_NEEDMOREPARAMS();
+	errAlreadyRegistered = new ERR_ALREADYREGISTERED();
+	errPasswMismatch = new ERR_PASSWDMISMATCH();
 
 	commandList["PASS"] = this->pass;
 	commandList["NICK"] = this->nick;
 	commandList["USER"] = this->user;
 	commandList["ERR_NEEDMOREPARAMS"] = this->errNeedMoreParams;
+	commandList["ERR_ALREADYREGISTERED"] = this->errAlreadyRegistered;
+	commandList["ERR_PASSWDMISMATCH"] = this->errPasswMismatch;
 }
 
 Commands::~Commands() {
@@ -19,6 +23,7 @@ Commands::~Commands() {
 	delete nick;
 	delete user;
 	delete errNeedMoreParams;
+	delete errAlreadyRegistered;
 }
 
 void Commands::sendCommand(std::string message, Client *target) {

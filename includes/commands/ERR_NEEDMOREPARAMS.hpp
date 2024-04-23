@@ -10,11 +10,10 @@ class ERR_NEEDMOREPARAMS : public ACommand {
 
 		ERR_NEEDMOREPARAMS &operator=(ERR_NEEDMOREPARAMS const &copy);
 
-		std::string	arranger(std::string sourceCommand);
+		std::string	arranger(std::string sourceCommand, Client *client);
 
 	private:
 		ERR_NEEDMOREPARAMS(ERR_NEEDMOREPARAMS const &copy);
-
 };
 
 #endif

@@ -18,7 +18,7 @@ void USER::handleCommand(std::string message, Client *source) {
 	std::vector<std::string> parameters = parseMessage(message);
 	if (parameters.size() == 4 && validateParameters(parameters)) {
 		if (source->hasMode('r'))
-			return; //FIXME send back ERR_ALREADYREGISTERED
+			commands->sendCommand(commands->errAlreadyRegistered->arranger(source), source);
 		else {
 			source->setUsername(parameters[0]);
 			source->setRealname(parameters[3]);
@@ -26,7 +26,7 @@ void USER::handleCommand(std::string message, Client *source) {
 		}
 	}
 	else
-		commands->sendCommand(commands->errNeedMoreParams->arranger(this->command), source);
+		commands->sendCommand(commands->errNeedMoreParams->arranger(this->command, source), source);
 }
 
 std::string USER::arranger() {

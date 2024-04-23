@@ -17,15 +17,15 @@ PASS &PASS::operator = (PASS const &copy) {
 void PASS::handleCommand(std::string message, Client *source) {
 	std::vector<std::string> parameters = parseMessage(message);
 	if (parameters.empty())
-		commands->sendCommand(commands->errNeedMoreParams->arranger(this->command), source);
+		commands->sendCommand(commands->errNeedMoreParams->arranger(this->command, source), source);
 	else if (source->hasMode('r'))
-		return;//FIXME send back ERR_ALREADYREGISTERED
+		commands->sendCommand(commands->errAlreadyRegistered->arranger(source), source);
 	else if (commands->server->checkPassword(parameters[0])) {
 		source->setValidPass();
 		source->tryToRegister();
 	}
 	else
-		return;//FIXME send ERR_PASSWDMISMATCH
+		commands->sendCommand(commands->errPasswMismatch->arranger(source), source);
 
 }
 

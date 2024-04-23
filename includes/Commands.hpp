@@ -11,6 +11,8 @@ class PASS;
 class NICK;
 class USER;
 class ERR_NEEDMOREPARAMS;
+class ERR_ALREADYREGISTERED;
+class ERR_PASSWDMISMATCH;
 
 class Commands {
 	public:
@@ -24,10 +26,12 @@ class Commands {
 		void		sendCommand(std::string message, Channel *target);
 		void		sendCommand(std::string message);
 
-		PASS				*pass;
-		NICK				*nick;
-		USER				*user;
-		ERR_NEEDMOREPARAMS	*errNeedMoreParams;
+		PASS					*pass;
+		NICK					*nick;
+		USER					*user;
+		ERR_NEEDMOREPARAMS		*errNeedMoreParams;
+		ERR_ALREADYREGISTERED	*errAlreadyRegistered;
+		ERR_PASSWDMISMATCH		*errPasswMismatch;
 
 	private:
 		Commands();
@@ -41,5 +45,7 @@ class Commands {
 # include "NICK.hpp"
 # include "USER.hpp"
 # include "ERR_NEEDMOREPARAMS.hpp"
+# include "ERR_ALREADYREGISTERED.hpp"
+# include "ERR_PASSWDMISMATCH.hpp"
 
 #endif
