@@ -3,15 +3,15 @@
 Commands::Commands(Server *s) {
 	server = s;
 
-	pass = new PASS(this);
-	nick = new NICK(this);
-	user = new USER(this);
-	errNeedMoreParams = new ERR_NEEDMOREPARAMS();
-	errAlreadyRegistered = new ERR_ALREADYREGISTERED();
-	errPasswMismatch = new ERR_PASSWDMISMATCH();
-	errNoNicknameGiven = new ERR_NONICKNAMEGIVEN();
-	errNicknameInUse = new ERR_NICKNAMEINUSE();
-	errErroneusNickname = new ERR_ERRONEUSNICKNAME();
+	pass = std::shared_ptr<PASS>(new PASS(this));
+	nick = std::shared_ptr<NICK>(new NICK(this));
+	user = std::shared_ptr<USER>(new USER(this));
+	errNeedMoreParams = std::shared_ptr<ERR_NEEDMOREPARAMS>(new ERR_NEEDMOREPARAMS());
+	errAlreadyRegistered = std::shared_ptr<ERR_ALREADYREGISTERED>(new ERR_ALREADYREGISTERED());
+	errPasswMismatch = std::shared_ptr<ERR_PASSWDMISMATCH>(new ERR_PASSWDMISMATCH());
+	errNoNicknameGiven = std::shared_ptr<ERR_NONICKNAMEGIVEN>(new ERR_NONICKNAMEGIVEN());
+	errNicknameInUse = std::shared_ptr<ERR_NICKNAMEINUSE>(new ERR_NICKNAMEINUSE());
+	errErroneusNickname = std::shared_ptr<ERR_ERRONEUSNICKNAME>(new ERR_ERRONEUSNICKNAME());
 
 	commandList["PASS"] = this->pass;
 	commandList["NICK"] = this->nick;
@@ -24,14 +24,7 @@ Commands::Commands(Server *s) {
 }
 
 Commands::~Commands() {
-	delete pass;
-	delete nick;
-	delete user;
-	delete errNeedMoreParams;
-	delete errAlreadyRegistered;
-	delete errNoNicknameGiven;
-	delete errNicknameInUse;
-	delete errErroneusNickname;
+	commandList.clear();
 }
 
 void Commands::sendCommand(std::string message, Client *target) {
@@ -55,7 +48,7 @@ void Commands::sendCommand(std::string message) {
 	return ;
 }
 
-ACommand *Commands::getCommandFromList(std::string command) {
+std::shared_ptr<ACommand> Commands::getCommandFromList(std::string command) {
 	if (commandList.find(command) != commandList.end())
 		return (commandList[command]);
 	return (nullptr);

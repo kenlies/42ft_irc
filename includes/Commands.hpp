@@ -6,6 +6,7 @@
 # include "Client.hpp"
 # include "Channel.hpp"
 # include <unordered_map>
+# include <memory>
 
 class PASS;
 class NICK;
@@ -24,27 +25,27 @@ class Commands {
 		Commands(Server *s);
 		~Commands();
 
-		ACommand	*getCommandFromList(std::string command);
+		std::shared_ptr<ACommand> getCommandFromList(std::string command);
 		void		sendCommand(std::string message, Client *target);
 		void		sendCommand(std::string message, Channel *target);
 		void		sendCommand(std::string message);
 
-		PASS					*pass;
-		NICK					*nick;
-		USER					*user;
-		ERR_NEEDMOREPARAMS		*errNeedMoreParams;
-		ERR_ALREADYREGISTERED	*errAlreadyRegistered;
-		ERR_PASSWDMISMATCH		*errPasswMismatch;
-		ERR_NONICKNAMEGIVEN		*errNoNicknameGiven;
-		ERR_NICKNAMEINUSE		*errNicknameInUse;
-		ERR_ERRONEUSNICKNAME	*errErroneusNickname;
+		std::shared_ptr<PASS>					pass;
+		std::shared_ptr<NICK>					nick;
+		std::shared_ptr<USER>					user;
+		std::shared_ptr<ERR_NEEDMOREPARAMS>		errNeedMoreParams;
+		std::shared_ptr<ERR_ALREADYREGISTERED>	errAlreadyRegistered;
+		std::shared_ptr<ERR_PASSWDMISMATCH>		errPasswMismatch;
+		std::shared_ptr<ERR_NONICKNAMEGIVEN>	errNoNicknameGiven;
+		std::shared_ptr<ERR_NICKNAMEINUSE>		errNicknameInUse;
+		std::shared_ptr<ERR_ERRONEUSNICKNAME>	errErroneusNickname;
 
 	private:
 		Commands();
 		Commands(Commands &copy);
 		Commands &operator = (Commands &copy);
 
-		std::unordered_map<std::string, ACommand*>	commandList;
+		std::unordered_map<std::string, std::shared_ptr<ACommand>>	commandList;
 };
 
 # include "PASS.hpp"
