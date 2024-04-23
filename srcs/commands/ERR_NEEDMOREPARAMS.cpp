@@ -12,7 +12,6 @@ ERR_NEEDMOREPARAMS &ERR_NEEDMOREPARAMS::operator = (ERR_NEEDMOREPARAMS const &co
 	return (*this);
 }
 
-std::string ERR_NEEDMOREPARAMS::arranger(std::string sourceCommand, Client *client) {
-	std::string nick = client->getNickname();
-	return (command + " " + nick + " " + sourceCommand + " :Not enough parameters");
+std::string ERR_NEEDMOREPARAMS::arranger(std::string sourceCommand, Client *source) {
+	return (command + " " + source->getNickname() + " " + sourceCommand + " :Not enough parameters");
 }

@@ -10,7 +10,7 @@ class ERR_NONICKNAMEGIVEN : public ACommand {
 
 		ERR_NONICKNAMEGIVEN &operator=(ERR_NONICKNAMEGIVEN const &copy);
 
-		std::string	arranger(Client *client);
+		std::string	arranger(Client *source);
 
 	private:
 		ERR_NONICKNAMEGIVEN(ERR_NONICKNAMEGIVEN const &copy);

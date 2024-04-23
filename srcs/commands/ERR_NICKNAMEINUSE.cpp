@@ -12,7 +12,6 @@ ERR_NICKNAMEINUSE &ERR_NICKNAMEINUSE::operator = (ERR_NICKNAMEINUSE const &copy)
 	return (*this);
 }
 
-std::string ERR_NICKNAMEINUSE::arranger(std::string sourceNickname, Client *client) {
-	std::string nick = client->getNickname();
-	return (command + " " + nick + " " + sourceNickname + " :Not enough parameters");
+std::string ERR_NICKNAMEINUSE::arranger(std::string sourceNickname, Client *source) {
+	return (command + " " + source->getNickname() + " " + sourceNickname + " :Not enough parameters");
 }

@@ -12,7 +12,6 @@ ERR_NONICKNAMEGIVEN &ERR_NONICKNAMEGIVEN::operator = (ERR_NONICKNAMEGIVEN const 
 	return (*this);
 }
 
-std::string ERR_NONICKNAMEGIVEN::arranger(Client *client) {
-	std::string nick = client->getNickname();
-	return (command + " " + nick + " :No nickname given");
+std::string ERR_NONICKNAMEGIVEN::arranger(Client *source) {
+	return (command + " " + source->getNickname() + " :No nickname given");
 }

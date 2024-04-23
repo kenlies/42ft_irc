@@ -12,7 +12,6 @@ ERR_ALREADYREGISTERED &ERR_ALREADYREGISTERED::operator = (ERR_ALREADYREGISTERED 
 	return (*this);
 }
 
-std::string ERR_ALREADYREGISTERED::arranger(Client *client) {
-	std::string nick = client->getNickname();
-	return (command + " " + nick + " :You may not reregister");
+std::string ERR_ALREADYREGISTERED::arranger(Client *source) {
+	return (command + " " + source->getNickname() + " :You may not reregister");
 }

@@ -10,7 +10,7 @@ class ERR_NICKNAMEINUSE : public ACommand {
 
 		ERR_NICKNAMEINUSE &operator=(ERR_NICKNAMEINUSE const &copy);
 
-		std::string	arranger(std::string sourceNickname, Client *client);
+		std::string	arranger(std::string sourceNickname, Client *source);
 
 	private:
 		ERR_NICKNAMEINUSE(ERR_NICKNAMEINUSE const &copy);
