@@ -3,7 +3,6 @@
 
 # include "colors.h"
 # include "Client.hpp"
-# include "Channel.hpp"
 # include <iostream>
 # include <string>
 # include <sstream>
