@@ -16,7 +16,7 @@ NICK &NICK::operator = (NICK const &copy) {
 void NICK::handleCommand(std::string message, Client *source) {
 	std::vector<std::string> parameters = parseMessage(message);
 	if (parameters.empty())
-		return; //FIXME send ERR_NONICKNAMEGIVEN
+		commands->sendCommand(commands->errNoNicknameGiven->arranger(source), source);
 	else if (validateNickname(parameters[0])) {
 		if (commands->server->nickExists(parameters[0]))
 			return; //FIXME send ERR_NICKNAMEINUSE
