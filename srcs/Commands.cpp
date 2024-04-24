@@ -28,11 +28,12 @@ Commands::~Commands() {
 }
 
 void Commands::sendCommand(std::string message, Client *target) {
-	std::string response = BLUE "Received this: " RESET;
-    response += message;
-	response += "\n";
-
-    send(target->getSocketFd(), response.c_str(), response.length(), 0);
+	// std::string response = BLUE "Sending this: " RESET;
+    // response += message;
+	// response += "\n";
+	// std::cout << response;
+	message += "\r\n";
+    send(target->getSocketFd(), message.c_str(), message.length(), 0);
 }
 
 void Commands::sendCommand(std::string message, Channel *target) {
