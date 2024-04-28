@@ -29,7 +29,6 @@ class Server {
 		unsigned int	getClientCount();
 		bool			addChannel(std::string channelName);
 		bool			delChannel(std::string channelName);
-		bool			channelExists(std::string channelName);
 		Channel			*getChannel(std::string channelName);
 
 	private:

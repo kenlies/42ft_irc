@@ -92,14 +92,8 @@ bool Server::delChannel(std::string channelName) {
 	return (false);
 }
 
-bool Server::channelExists(std::string channelName) {
-	if (channels.find(channelName) != channels.end())
-		return (true);
-	return (false);
-}
-
 Channel *Server::getChannel(std::string channelName) {
-	if (channelExists(channelName))
+	if (channels.find(channelName) != channels.end())
 		return (channels[channelName]);
 	return (nullptr);
 }
