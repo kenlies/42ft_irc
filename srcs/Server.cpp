@@ -98,6 +98,14 @@ Channel *Server::getChannel(std::string channelName) {
 	return (nullptr);
 }
 
+Client *Server::getClient(std::string nickname) {
+	for (size_t i = 0; i < clients.size(); ++i) {
+		if (clients[i]->getNickname() == nickname)
+			return (clients[i]);
+	}
+	return (nullptr);
+}
+
 void	Server::initListenSocket() {
 	// Creating socket
 	this->serverSocket = socket(AF_INET, SOCK_STREAM, 0);

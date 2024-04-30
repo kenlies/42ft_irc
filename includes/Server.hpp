@@ -30,6 +30,7 @@ class Server {
 		bool			addChannel(std::string channelName);
 		bool			delChannel(std::string channelName);
 		Channel			*getChannel(std::string channelName);
+		Client			*getClient(std::string nickname);
 
 	private:
 		Server();
