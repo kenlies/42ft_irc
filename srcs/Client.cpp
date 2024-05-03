@@ -7,6 +7,9 @@ Client::Client(int socketFd) {
 }
 
 Client::~Client() {
+	for (std::pair<std::string, Channel *> chan : joinedChannels) {
+		chan.second->userLeave(this);
+	}
 }
 
 void Client::addBufferToMsgBuffer(std::string buffer) {
