@@ -33,7 +33,7 @@ void PRIVMSG::handleCommand(std::string message, Client *source) {
 				if (parameters[1][0] != ':')
 					commands->sendCommand(commands->errNoTextToSend->arranger(source), source);
 				else
-					commands->sendCommand(arranger(targetChannel, parameters[1]), source, targetChannel);
+					commands->sendCommand(arranger(targetChannel, parameters[1]), source, targetChannel, source);
 			}
 			else
 				commands->sendCommand(commands->errNoSuchNick->arranger(parameters[0], source), source);
