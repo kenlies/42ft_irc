@@ -63,7 +63,7 @@ void JOIN::handleCommand(std::string message, Client *source) {
 					continue ;
 				}
 			}
-			else if (channel->userIsJoined()) {
+			else if (channel->userIsJoined(source)) {
 				continue ;
 			}
 
