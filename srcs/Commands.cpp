@@ -89,7 +89,7 @@ void Commands::sendCommand(std::string message, Client *source, Client *target) 
 
 void Commands::sendCommand(std::string message, Channel *target) {
 	//Debug
-	std::cerr << BLUE "Sending to" RESET + target->getName() + BLUE ": " RESET + message << std::endl;
+	std::cerr << BLUE "Sending to " RESET + target->getName() + BLUE ": " RESET + message << std::endl;
 
 	message += "\r\n";
 	for (Client *user : target->getUserList()) {
@@ -105,7 +105,7 @@ void Commands::sendCommand(std::string message, Client *source, Channel *target)
 
 void Commands::sendCommand(std::string message, Channel *target, Client *exclude) {
 	//Debug
-	std::cerr << BLUE "Sending to" RESET + target->getName() + BLUE " excluding user " RESET + target->getName() + BLUE ": " RESET + message << std::endl;
+	std::cerr << BLUE "Sending to " RESET + target->getName() + BLUE " excluding user " RESET + exclude->getNickname() + BLUE ": " RESET + message << std::endl;
 
 	message += "\r\n";
 	for (Client *user : target->getUserList()) {
