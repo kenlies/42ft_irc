@@ -16,6 +16,7 @@ class MODE;
 class MOTD;
 class NAMES;
 class NICK;
+class OPER;
 class PART;
 class PASS;
 class PING;
@@ -99,6 +100,7 @@ class Commands {
 		std::shared_ptr<MOTD>					motd;
 		std::shared_ptr<NAMES>					names;
 		std::shared_ptr<NICK>					nick;
+		std::shared_ptr<OPER>					oper;
 		std::shared_ptr<PART>					part;
 		std::shared_ptr<PASS>					pass;
 		std::shared_ptr<PING>					ping;
@@ -172,6 +174,7 @@ class Commands {
 # include "MOTD.hpp"
 # include "NAMES.hpp"
 # include "NICK.hpp"
+# include "OPER.hpp"
 # include "PART.hpp"
 # include "PASS.hpp"
 # include "PING.hpp"

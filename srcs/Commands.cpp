@@ -11,6 +11,7 @@ Commands::Commands(Server *s) {
 	motd = std::shared_ptr<MOTD>(new MOTD(this));
 	names = std::shared_ptr<NAMES>(new NAMES(this));
 	nick = std::shared_ptr<NICK>(new NICK(this));
+	oper = std::shared_ptr<OPER>(new OPER(this));
 	part = std::shared_ptr<PART>(new PART(this));
 	pass = std::shared_ptr<PASS>(new PASS(this));
 	ping = std::shared_ptr<PING>(new PING(this));
@@ -77,6 +78,7 @@ Commands::Commands(Server *s) {
 		commandList["MOTD"] = this->motd;
 		commandList["NAMES"] = this->names;
 		commandList["NICK"] = this->nick;
+		commandList["OPER"] = this->oper;
 		commandList["PART"] = this->part;
 		commandList["PASS"] = this->pass;
 		commandList["PING"] = this->ping;
