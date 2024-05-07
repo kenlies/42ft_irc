@@ -18,8 +18,5 @@ std::string ERR_NICKNAMEINUSE::arranger(std::string nicknameInUse, Client *sourc
 	if (source)
 		nickname = source->getNickname();
 
-	if (nickname.empty())
-		nickname = "*";
-
 	return (command + " " + nickname + " " + nicknameInUse + " :Nickname is already in use");
 }
