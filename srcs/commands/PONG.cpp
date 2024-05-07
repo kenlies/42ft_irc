@@ -19,5 +19,5 @@ void PONG::handleCommand(std::string message, Client *source) {
 }
 
 std::string PONG::arranger(std::vector<std::string> parameters) {
-	return ("PONG 127.0.0.1 " + parameters[0]);
+	return (this->command + " 127.0.0.1 " + parameters[0]);
 }
