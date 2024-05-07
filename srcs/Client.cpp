@@ -4,6 +4,7 @@
 
 Client::Client(int socketFd) {
 	this->socketFd = socketFd;
+	this->nickname = "*";
 }
 
 Client::~Client() {}
