@@ -42,6 +42,7 @@ void PART::handleCommand(std::string message, Client *source) {
 		catch (...) {
 			commands->sendCommand(commands->errUnknownError->arranger \
 			(this->command, "Adding the parameter to the list has failed", source), source);
+			return ;
 		}
 
 		for (std::string channelName : channels) {
