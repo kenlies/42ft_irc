@@ -97,8 +97,14 @@ std::string Client::getMsgFromBuffer(void) {
 
 	size_t pos = this->msgBuffer.find("\r\n");
 	if (pos != std::string::npos) {
-		message = this->msgBuffer.substr(0, pos);
-		this->msgBuffer = this->msgBuffer.substr(pos + 2);
+		try {
+			message = this->msgBuffer.substr(0, pos);
+			this->msgBuffer = this->msgBuffer.substr(pos + 2);
+		}
+		catch (...) {
+			std::cerr << "Error: Substring failed!" << std::endl;
+			this->msgBuffer.clear();
+		}
 	}
 	else
 		return ("");
