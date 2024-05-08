@@ -276,6 +276,9 @@ std::string MODE::parseModeMessage(std::string modeString, std::vector<std::stri
 		}
 	}
 
+	if (modeString[modeString.size() - 1] == '+' || modeString[modeString.size() - 1] == '-')
+		modeString.erase(modeString.end() - 1);
+
 	if (modeString.empty() || modeString.size() == 1)
 		return ("");
 
