@@ -1,7 +1,5 @@
 #include "Client.hpp"
 
-// FIXME catch all exceptions here!!!!!!!!!!
-
 Client::Client(int const socketFd) : socketFd(socketFd) {
 	this->nickname = "*";
 }
@@ -9,20 +7,19 @@ Client::Client(int const socketFd) : socketFd(socketFd) {
 Client::~Client() {}
 
 void Client::addBufferToMsgBuffer(std::string const buffer) {
-	// FIXME: Maybe better handling for overflow???
-	// if the message becomes longer than MSG_BUFFER_SIZE
 	if (this->msgBuffer.length() + buffer.length() > MSG_BUFFER_SIZE) {
-		// only accepts the message for the defined MSG_BUFFER_SIZE
-		this->msgBuffer += buffer.substr(0, MSG_BUFFER_SIZE - this->msgBuffer.length());
-		//finds the last occurance of the \r\n, if that exists
-		size_t found = this->msgBuffer.rfind("\r\n");
-		// if \r\n exists it removes the rest of the message
-		if (found != std::string::npos)
-			this->msgBuffer = this->msgBuffer.substr(0, found);
-		// if it is longer than MSG_BUFFER_SIZE and no \r\n it clears the messageBuffer!
-		else
+		try {
+			this->msgBuffer += buffer.substr(0, MSG_BUFFER_SIZE - this->msgBuffer.length());
+			size_t found = this->msgBuffer.rfind("\r\n");
+			if (found != std::string::npos)
+				this->msgBuffer = this->msgBuffer.substr(0, found);
+			else
+				this->msgBuffer.clear();
+		}
+		catch (...) {
+			std::cerr << "Error: Substring failed!" << std::endl;
 			this->msgBuffer.clear();
-		std::cout << RED << "Error: Message buffer is full!" << std::endl;
+		}
 	}
 	else
 		this->msgBuffer += buffer;
