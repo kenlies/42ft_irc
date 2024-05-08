@@ -26,5 +26,5 @@ void QUIT::handleCommand(std::string message, Client *source) {
 }
 
 std::string QUIT::arranger(std::string message) {
-	return (this->command + ":" + message);
+	return (this->command + " :" + message);
 }
