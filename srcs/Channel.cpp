@@ -60,14 +60,12 @@ void Channel::setPassword(std::string const newPassword) {
 }
 
 bool Channel::checkPassword(std::string const input) const {
-	// FIXME if client provides invalid password send back ERR_BADCHANNELKEY
 	if (input == password)
 		return (true);
 	return (false);
 }
 
 bool Channel::validatePassword(std::string const password) const {
-	// FIXME if validation fails, send ERR_INVALIDMODEPARAM or ERR_INVALIDKEY to client
 	if (password.empty())
 		return (false);
 	if (std::string(password).find(' ') != std::string::npos)
@@ -83,7 +81,7 @@ bool Channel::isAllowedChannelMode(char const mode) const {
 	// o : Give/take channel operator privilege
 	// l : Set/remove the user limit to channel
 
-	// FIXME This function checks channel modes that we can accept as parameter
+	// This function checks channel modes that we can accept as parameter
 	// to MODE. However things are way more complicated than that:
 	// - setting or unsetting 'k' and 'o' mode always requires parameter
 	// - 'l' requires parameter only when set (+l) but must not have one when unset (-l)
