@@ -83,15 +83,9 @@ void JOIN::handleCommand(std::string const message, Client *source) {
 				continue ;
 			}
 
-			if (channel->hasMode('k')) {
-				if (i >= channelKeysCount) {
-					commands->sendCommand(commands->errBadChannelKey->arranger(source, channel), source);
-					continue ;
-				}
-				else if (!channel->validatePassword(channelKeys[i])) {
-					commands->sendCommand(commands->errInvalidKey->arranger(source, channel), source);
-					continue ;
-				}
+			if (channel->hasMode('k') && (i >= channelKeysCount || !channel->checkPassword(channelKeys[i]))) {
+				commands->sendCommand(commands->errBadChannelKey->arranger(source, channel), source);
+				continue ;
 			}
 
 			if (channel->hasMode('l') && channel->getUserCount() >= channel->getUserLimit()) {
