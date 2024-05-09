@@ -39,7 +39,7 @@ void Bot::handleBotMessage(std::string const message, Channel *target) {
 		reply = getJoke();
 	else if (parameters[1] == "PRIVMSG" && parameters[3] == ":!gtfo")
 		commands->part->handleCommand(channel + " :Good bye!", this);
-	else if (parameters[1] == "PART" && parameters[0] != ":" + this->getNickname()) {
+	else if ((parameters[1] == "PART" || parameters[1] == "QUIT") && parameters[0] != ":" + this->getNickname()) {
 		if (target->getUserCount() == 2)
 			commands->part->handleCommand(channel + " :Good bye!" , this);
 	}
