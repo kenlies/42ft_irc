@@ -239,6 +239,8 @@ void Server::handleClientData(size_t const pollFdIndex) {
 		for (std::pair<std::string, Channel *> chanPair : client->getJoinedChannels()) {
 			commands->sendCommand(commands->quit->arranger("disconnected"), client, chanPair.second, client);
 			chanPair.second->userLeave(client);
+			if (chanPair.second->getUserCount() == 1 && this->ircBot->inChannel(chanPair.second))
+				this->ircBot->leaveChannel(chanPair.second);
 			if (chanPair.second->getUserCount() == 0)
 				delChannel(chanPair.second);
 		}
