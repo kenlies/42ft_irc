@@ -229,6 +229,8 @@ bool MODE::handleClientLimitMode(std::string const parameter, bool const setFlag
 		int	userLimit;
 		try {
 			userLimit = stoi(parameter);
+			if (userLimit < 1 || userLimit > 9999)
+				return (false);
 			if (!clientLimitFlag) {
 				targetChannel->setUserLimit(userLimit);
 				targetChannel->addMode('l');
