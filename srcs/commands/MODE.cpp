@@ -61,7 +61,7 @@ void MODE::handleClientModes(std::vector<std::string> const parameters, Client *
 
 	while (parameters[1][i]) {
 		if (parameters[1][i] == 'o' && !modeFlag) {
-			if (parameters[1][i - 1] && parameters[1][i] == '-') {
+			if (parameters[1][i - 1] && parameters[1][i - 1] == '-') {
 				if (targetClient->hasMode('o')) {
 					targetClient->delMode('o');
 					commands->sendCommand(arranger("-o", targetClient), source, source);
