@@ -74,7 +74,7 @@ bool Client::hasMode(char const mode) const {
 bool Client::tryToRegister(void) {
 	if (this->hasMode('r'))
 		return (false);
-	if (!username.empty() && !nickname.empty() && validPass) {
+	if (!username.empty() && !nickname.empty() && nickname != "*" && validPass) {
 		this->addMode('r');
 		return (true);
 	}
