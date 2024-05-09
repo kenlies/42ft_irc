@@ -65,14 +65,6 @@ bool Channel::checkPassword(std::string const input) const {
 	return (false);
 }
 
-bool Channel::validatePassword(std::string const password) const {
-	if (password.empty())
-		return (false);
-	if (std::string(password).find(' ') != std::string::npos)
-		return (false);
-	return (true);
-}
-
 bool Channel::isAllowedChannelMode(char const mode) const {
 	// Channel modes supported by this server:
 	// i : Set/remove Invite-only channel

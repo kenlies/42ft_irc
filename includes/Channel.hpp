@@ -27,7 +27,6 @@ class Channel {
 		void								setPassword(std::string const newPassword);
 
 		bool								checkPassword(std::string const input) const;
-		bool								validatePassword(std::string const password) const;
 		bool								isAllowedChannelMode(char const mode) const;
 		bool								addMode(char const mode);
 		bool								delMode(char const mode);
