@@ -2,6 +2,7 @@
 
 Client::Client(int const socketFd) : socketFd(socketFd) {
 	this->nickname = "*";
+	this->validPass = false;
 }
 
 Client::~Client() {}
