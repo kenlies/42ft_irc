@@ -149,6 +149,8 @@ void	Server::initListenSocket() {
 	// Add server socket to the list of file descriptors to be polled
 	pollfd serverPollfd;
 	serverPollfd.fd = this->serverSocket;
+	if (fcntl(serverPollfd.fd, F_SETFL, O_NONBLOCK) == -1)
+		throw std::runtime_error("Error setting non-blocking listening socket!");
 	serverPollfd.events = POLLIN;
 	pfds.push_back(serverPollfd);
 }
@@ -204,15 +206,19 @@ void Server::handleNewConnection() {
 		return ;
 	}
 
+	pollfd clientPollfd;
 	try {
 		// Add the client socket to the list of polled file descriptors
-		pollfd clientPollfd;
 		clientPollfd.fd = clientSocket;
+		if (fcntl(clientPollfd.fd, F_SETFL, O_NONBLOCK) == -1)
+			throw std::runtime_error("Error setting non-blocking client socket!");
 		clientPollfd.events = POLLIN;
 		pfds.push_back(clientPollfd);
 	}
 	catch (std::exception &e) {
 		std::cerr << RED << "Error creating new client: " << e.what() << RESET << std::endl;
+		close(clientPollfd.fd);
+		clients.erase(std::remove(clients.begin(), clients.end(), newClient), clients.end());
 		delete newClient;
 		return ;
 	}

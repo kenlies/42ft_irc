@@ -16,6 +16,7 @@
 # include <algorithm>
 # include <unordered_map>
 # include <arpa/inet.h>
+# include <fcntl.h>
 
 class Commands;
 class Bot;
