@@ -18,5 +18,5 @@ std::string const RPL_YOURHOST::arranger(Client *source) const {
 	if (source)
 		nickname = source->getNickname();
 
-	return (command + " " + nickname + " :Your host is ft_irc, running version 1.69");
+	return (command + " " + nickname + " :Your host is ft_irc, running version 2.69");
 }
