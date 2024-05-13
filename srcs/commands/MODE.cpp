@@ -56,12 +56,17 @@ void MODE::handleCommand(std::string const message, Client *source) {
 
 void MODE::handleClientModes(std::vector<std::string> const parameters, Client *source, Client *targetClient) {
 	size_t	i = 0;
+	bool	setFlag = true;
 	bool	unknownModeFlag = false;
 	bool	modeFlag = false;
 
 	while (parameters[1][i]) {
-		if (parameters[1][i] == 'o' && !modeFlag) {
-			if (parameters[1][i - 1] && parameters[1][i - 1] == '-') {
+		if (parameters[1][i] == '+')
+			setFlag = true;
+		else if (parameters[1][i] == '-')
+			setFlag = false;
+		else if (parameters[1][i] == 'o' && !modeFlag) {
+			if (!setFlag) {
 				if (targetClient->hasMode('o')) {
 					targetClient->delMode('o');
 					commands->sendCommand(arranger("-o", targetClient), source, source);
