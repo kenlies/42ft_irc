@@ -57,7 +57,9 @@ void Bot::handleBotMessage(std::string const message, Client *target) {
 std::string const	Bot::getJoke(void) const {
 	std::vector<std::string> const jokes = {
 		"What do you call IRC operator cleaning floors? - A moperator",
-		"How do you get IRC user to visit? - You INVITE them"
+		"How do you get IRC user to visit? - You INVITE them",
+		"Why IRC users don't mind leaving a channel? - It's the best PART",
+		"What is an IRC user's favorite game? - PING PONG"
 	};
 
 	std::random_device rd;
