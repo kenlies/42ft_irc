@@ -62,6 +62,8 @@ void JOIN::handleCommand(std::string const message, Client *source) {
 				continue ;
 			}
 
+			channels[i].erase(std::remove(channels[i].begin(), channels[i].end(), 7), channels[i].end());
+
 			if (channels[i].size() > 32)
 				channels[i].resize(32);
 
