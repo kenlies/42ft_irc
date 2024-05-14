@@ -45,8 +45,8 @@ void Server::validatePort(char *port) {
 			throw std::runtime_error("Error: Port must be a number!");
 	}
 	const int	p = std::atoi(port);
-	if (p < 0 || p > 65535)
-		throw std::runtime_error("Error: Port must be between 0 and 65536!");
+	if (p <= 0 || p > 65535)
+		throw std::runtime_error("Error: Port must be between 1 and 65536!");
 	this->port = p;
 }
 
