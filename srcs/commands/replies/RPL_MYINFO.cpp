@@ -18,5 +18,5 @@ std::string const RPL_MYINFO::arranger(Client *source) const {
 	if (source)
 		nickname = source->getNickname();
 
-	return (command + " " + nickname + " 2.69 or klit kl");
+	return (command + " " + nickname + " 3.69 or klit kl");
 }
