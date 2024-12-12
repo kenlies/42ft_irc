@@ -1,1 +1,3 @@
 Updating this later...
+
+in short, this is: an irc server which operates by the official IRC protocol and to which you can connect with an irc client.
